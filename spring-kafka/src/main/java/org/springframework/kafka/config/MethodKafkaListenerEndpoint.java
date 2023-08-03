@@ -147,8 +147,8 @@ public class MethodKafkaListenerEndpoint<K, V> extends AbstractKafkaListenerEndp
 				}
 				String topic = destinations.length == 1 ? destinations[0] : "";
 				BeanFactory beanFactory = getBeanFactory();
-				if (beanFactory instanceof ConfigurableListableBeanFactory) {
-					topic = ((ConfigurableListableBeanFactory) beanFactory).resolveEmbeddedValue(topic);
+				if (beanFactory instanceof ConfigurableListableBeanFactory factory) {
+					topic = factory.resolveEmbeddedValue(topic);
 					if (topic != null) {
 						topic = resolve(topic);
 					}
@@ -213,16 +213,16 @@ public class MethodKafkaListenerEndpoint<K, V> extends AbstractKafkaListenerEndp
 			if (batchToRecordAdapter != null) {
 				messageListener.setBatchToRecordAdapter(batchToRecordAdapter);
 			}
-			if (messageConverter instanceof BatchMessageConverter) {
-				messageListener.setBatchMessageConverter((BatchMessageConverter) messageConverter);
+			if (messageConverter instanceof BatchMessageConverter converter) {
+				messageListener.setBatchMessageConverter(converter);
 			}
 			listener = messageListener;
 		}
 		else {
 			RecordMessagingMessageListenerAdapter<K, V> messageListener = new RecordMessagingMessageListenerAdapter<K, V>(
 					this.bean, this.method, this.errorHandler);
-			if (messageConverter instanceof RecordMessageConverter) {
-				messageListener.setMessageConverter((RecordMessageConverter) messageConverter);
+			if (messageConverter instanceof RecordMessageConverter converter) {
+				messageListener.setMessageConverter(converter);
 			}
 			listener = messageListener;
 		}

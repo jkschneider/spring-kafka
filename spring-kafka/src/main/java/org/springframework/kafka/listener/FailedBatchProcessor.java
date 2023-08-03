@@ -172,12 +172,14 @@ public abstract class FailedBatchProcessor extends FailedRecordProcessor {
 			if (index < 0 || index >= data.count()) {
 				this.logger.warn(batchListenerFailedException, () -> {
 					if (record != null) {
-						return String.format("Record not found in batch: %s-%d@%d; re-seeking batch",
+						return "Record not found in batch: %s-%d@%d; re-seeking batch".formatted(
 								record.topic(), record.partition(), record.offset());
 					}
 					else {
-						return String.format("Record not found in batch, index %d out of bounds (0, %d); "
-								+ "re-seeking batch", index, data.count() - 1);
+						return ("""
+								Record not found in batch, index %d out of bounds (0, %d); \
+								re-seeking batch\
+								""").formatted(index, data.count() - 1);
 
 					}
 				});
@@ -304,8 +306,8 @@ public abstract class FailedBatchProcessor extends FailedRecordProcessor {
 			throwable = throwable.getCause();
 			checked.add(throwable);
 
-			if (throwable instanceof BatchListenerFailedException) {
-				target = (BatchListenerFailedException) throwable;
+			if (throwable instanceof BatchListenerFailedException exception) {
+				target = exception;
 				break;
 			}
 		}

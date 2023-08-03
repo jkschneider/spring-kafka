@@ -215,17 +215,21 @@ public class DefaultKafkaHeaderMapperTests {
 		mapper.fromHeaders(headers, target);
 		assertThat(target).containsExactlyInAnyOrder(
 				new RecordHeader(DefaultKafkaHeaderMapper.JSON_TYPES,
-						("{\"thisOnesEmpty\":\"java.lang.String\","
-								+ "\"thisOnesAString\":\"java.lang.String\"}").getBytes()),
+						("""
+								{"thisOnesEmpty":"java.lang.String",\
+								"thisOnesAString":"java.lang.String"}\
+								""").getBytes()),
 				new RecordHeader("thisOnesAString", "foo".getBytes()),
 				new RecordHeader("alwaysRaw", "baz".getBytes()),
 				new RecordHeader("thisOnesEmpty", "".getBytes()),
 				new RecordHeader("thisOnesBytes", "bar".getBytes()));
 		headersMap.clear();
 		target.add(new RecordHeader(DefaultKafkaHeaderMapper.JSON_TYPES,
-				("{\"thisOnesEmpty\":\"java.lang.String\","
-						+ "\"thisOnesAString\":\"java.lang.String\","
-						+ "\"backwardCompatible\":\"java.lang.String\"}").getBytes()));
+				("""
+						{"thisOnesEmpty":"java.lang.String",\
+						"thisOnesAString":"java.lang.String",\
+						"backwardCompatible":"java.lang.String"}\
+						""").getBytes()));
 		target.add(new RecordHeader("backwardCompatible", "\"qux\"".getBytes()));
 		mapper.toHeaders(target, headersMap);
 		assertThat(headersMap).contains(
@@ -240,8 +244,10 @@ public class DefaultKafkaHeaderMapperTests {
 		mapper.fromHeaders(headers, target);
 		assertThat(target).containsExactlyInAnyOrder(
 				new RecordHeader(DefaultKafkaHeaderMapper.JSON_TYPES,
-						("{\"thisOnesEmpty\":\"java.lang.String\","
-								+ "\"thisOnesAString\":\"java.lang.String\"}").getBytes()),
+						("""
+								{"thisOnesEmpty":"java.lang.String",\
+								"thisOnesAString":"java.lang.String"}\
+								""").getBytes()),
 				new RecordHeader("thisOnesAString", "\"foo\"".getBytes()),
 				new RecordHeader("thisOnesEmpty", "\"\"".getBytes()),
 				new RecordHeader("alwaysRaw", "baz".getBytes()),

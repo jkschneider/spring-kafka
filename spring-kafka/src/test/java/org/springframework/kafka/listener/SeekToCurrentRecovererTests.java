@@ -128,8 +128,8 @@ public class SeekToCurrentRecovererTests {
 			@Override
 			public void accept(ConsumerRecord<?, ?> record, @Nullable Consumer<?, ?> consumer, Exception exception) {
 				super.accept(record, consumer, exception);
-				if (exception instanceof ListenerExecutionFailedException) {
-					failedGroupId.set(((ListenerExecutionFailedException) exception).getGroupId());
+				if (exception instanceof ListenerExecutionFailedException failedException) {
+					failedGroupId.set(failedException.getGroupId());
 				}
 				recoverLatch.countDown();
 			}

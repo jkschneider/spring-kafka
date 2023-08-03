@@ -103,8 +103,10 @@ public class ExistingRetryTopicIntegrationTests {
 	private CountDownLatchContainer latchContainer;
 
 	@Test
-	@DisplayName("When a @RetryableTopic listener method, with autoCreateTopic=false and NO PARTITION info called, " +
-			"should send messages to be retried across partitions for a retry topic")
+	@DisplayName("""
+			When a @RetryableTopic listener method, with autoCreateTopic=false and NO PARTITION info called, \
+			should send messages to be retried across partitions for a retry topic\
+			""")
 	void whenNoPartitionInfoProvided_shouldRetryMainTopicCoveringAllPartitionOfRetryTopic() {
 
 		send10MessagesToPartitionWithKey(0, "foo", MAIN_TOPIC_WITH_NO_PARTITION_INFO, this.countByPartitionContainerWithoutPartition);
@@ -118,8 +120,10 @@ public class ExistingRetryTopicIntegrationTests {
 	}
 
 	@Test
-	@DisplayName("When a @RetryableTopic listener method, with autoCreateTopic=false and WITH PARTITION info called, " +
-			"should send messages to be retried across partitions for a retry topic")
+	@DisplayName("""
+			When a @RetryableTopic listener method, with autoCreateTopic=false and WITH PARTITION info called, \
+			should send messages to be retried across partitions for a retry topic\
+			""")
 	void whenPartitionInfoProvided_shouldRetryMainTopicCoveringAllPartitionOfRetryTopic() {
 
 		send10MessagesToPartitionWithKey(0, "foo", MAIN_TOPIC_WITH_PARTITION_INFO, this.countByPartitionContainerWithPartition);

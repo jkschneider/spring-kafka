@@ -385,8 +385,10 @@ public class KafkaMessageListenerContainer<K, V> // NOSONAR line count
 			if (!this.startLatch.await(containerProperties.getConsumerStartTimeout().toMillis(),
 					TimeUnit.MILLISECONDS)) {
 
-				this.logger.error("Consumer thread failed to start - does the configured task executor "
-						+ "have enough threads to support all containers and concurrency?");
+				this.logger.error("""
+						Consumer thread failed to start - does the configured task executor \
+						have enough threads to support all containers and concurrency?\
+						""");
 				publishConsumerFailedToStart();
 			}
 		}
@@ -685,8 +687,8 @@ public class KafkaMessageListenerContainer<K, V> // NOSONAR line count
 
 		@SuppressWarnings(RAWTYPES)
 		private final KafkaAwareTransactionManager kafkaTxManager =
-				this.transactionManager instanceof KafkaAwareTransactionManager
-						? ((KafkaAwareTransactionManager) this.transactionManager) : null;
+				this.transactionManager instanceof KafkaAwareTransactionManager katm
+						?katm : null;
 
 		private final TransactionTemplate transactionTemplate;
 
@@ -891,10 +893,12 @@ public class KafkaMessageListenerContainer<K, V> // NOSONAR line count
 				this.pollThreadStateProcessor = setUpPollProcessor(false);
 			}
 			else {
-				throw new IllegalArgumentException("Listener must be one of 'MessageListener', "
-						+ "'BatchMessageListener', or the variants that are consumer aware and/or "
-						+ "Acknowledging"
-						+ " not " + listener.getClass().getName());
+				throw new IllegalArgumentException("""
+						Listener must be one of 'MessageListener', \
+						'BatchMessageListener', or the variants that are consumer aware and/or \
+						Acknowledging\
+						 not \
+						""" + listener.getClass().getName());
 			}
 			this.listenerType = listenerType;
 			this.isConsumerAwareListener = listenerType.equals(ListenerType.ACKNOWLEDGING_CONSUMER_AWARE)
@@ -1601,8 +1605,10 @@ public class KafkaMessageListenerContainer<K, V> // NOSONAR line count
 						long position = this.consumer.position(tp);
 						Long saved = this.savedPositions.get(tp);
 						if (saved != null && saved.longValue() != position) {
-							this.logger.debug(() -> "Skipping TX offset correction - seek(s) have been performed; "
-									+ "saved: " + this.savedPositions + ", "
+							this.logger.debug(() -> """
+									Skipping TX offset correction - seek(s) have been performed; \
+									saved: \
+									""" + this.savedPositions + ", "
 									+ "comitted: " + oamd + ", "
 									+ "current: " + tp + "@" + position);
 							return;
@@ -1666,8 +1672,10 @@ public class KafkaMessageListenerContainer<K, V> // NOSONAR line count
 				if (this.remainingRecords != null) {
 					int howManyRecords = records.count();
 					if (howManyRecords > 0) {
-						this.logger.error(() -> String.format("Poll returned %d record(s) while consumer was paused "
-								+ "after an error; emergency stop invoked to avoid message loss", howManyRecords));
+						this.logger.error(() -> ("""
+								Poll returned %d record(s) while consumer was paused \
+								after an error; emergency stop invoked to avoid message loss\
+								""").formatted(howManyRecords));
 						KafkaMessageListenerContainer.this.emergencyStop.run();
 					}
 					TopicPartition firstPart = this.remainingRecords.partitions().iterator().next();
@@ -3080,15 +3088,19 @@ public class KafkaMessageListenerContainer<K, V> // NOSONAR line count
 			now = System.currentTimeMillis();
 			boolean elapsed = now - this.last > this.containerProperties.getAckTime();
 			if (ackMode.equals(AckMode.TIME) && elapsed) {
-				this.logger.debug(() -> "Committing in AckMode.TIME " +
-						"because time elapsed exceeds configured limit of " +
+				this.logger.debug(() -> """
+						Committing in AckMode.TIME \
+						because time elapsed exceeds configured limit of \
+						""" +
 						this.containerProperties.getAckTime());
 				commitIfNecessary();
 				this.last = now;
 			}
 			else if (ackMode.equals(AckMode.COUNT_TIME) && elapsed) {
-				this.logger.debug(() -> "Committing in AckMode.COUNT_TIME " +
-						"because time elapsed exceeds configured limit of " +
+				this.logger.debug(() -> """
+						Committing in AckMode.COUNT_TIME \
+						because time elapsed exceeds configured limit of \
+						""" +
 						this.containerProperties.getAckTime());
 				commitIfNecessary();
 				this.last = now;
@@ -3388,8 +3400,10 @@ public class KafkaMessageListenerContainer<K, V> // NOSONAR line count
 
 		@Override
 		public String toString() {
-			return "KafkaMessageListenerContainer.ListenerConsumer ["
-					+ "\ncontainerProperties=" + this.containerProperties
+			return """
+					KafkaMessageListenerContainer.ListenerConsumer [
+					containerProperties=\
+					""" + this.containerProperties
 					+ "\nother properties ["
 					+ "\n listenerType=" + this.listenerType
 					+ "\n isConsumerAwareListener=" + this.isConsumerAwareListener
@@ -3620,8 +3634,10 @@ public class KafkaMessageListenerContainer<K, V> // NOSONAR line count
 
 					ListenerConsumer.this.consumer.pause(partitions);
 					ListenerConsumer.this.consumerPaused = true;
-					ListenerConsumer.this.logger.warn("Paused consumer resumed by Kafka due to rebalance; "
-							+ "consumer paused again, so the initial poll() will never return any records");
+					ListenerConsumer.this.logger.warn("""
+							Paused consumer resumed by Kafka due to rebalance; \
+							consumer paused again, so the initial poll() will never return any records\
+							""");
 					ListenerConsumer.this.logger.debug(() -> "Paused consumption from: " + partitions);
 					publishConsumerPausedEvent(partitions, "Re-paused after rebalance");
 				}

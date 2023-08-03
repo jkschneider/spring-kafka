@@ -112,8 +112,8 @@ public class DelegatingInvocableHandler {
 		this.bean = bean;
 		this.resolver = beanExpressionResolver;
 		this.beanExpressionContext = beanExpressionContext;
-		this.beanFactory = beanFactory instanceof ConfigurableListableBeanFactory
-				? (ConfigurableListableBeanFactory) beanFactory
+		this.beanFactory = beanFactory instanceof ConfigurableListableBeanFactory clbf
+				? clbf
 				: null;
 		this.validator = validator == null ? null : new PayloadValidator(validator);
 	}

@@ -122,8 +122,8 @@ public final class ErrorHandlingUtils {
 		listen(retryListeners, records, thrownException, attempt++);
 		ConsumerRecord<?, ?> first = records.iterator().next();
 		MessageListenerContainer childOrSingle = container.getContainerFor(first.topic(), first.partition());
-		if (childOrSingle instanceof ConsumerPauseResumeEventPublisher) {
-			((ConsumerPauseResumeEventPublisher) childOrSingle)
+		if (childOrSingle instanceof ConsumerPauseResumeEventPublisher publisher) {
+			publisher
 					.publishConsumerPausedEvent(assignment, "For batch retry");
 		}
 		try {
@@ -201,8 +201,8 @@ public final class ErrorHandlingUtils {
 		finally {
 			Set<TopicPartition> assignment2 = consumer.assignment();
 			consumer.resume(assignment2);
-			if (childOrSingle instanceof ConsumerPauseResumeEventPublisher) {
-				((ConsumerPauseResumeEventPublisher) childOrSingle).publishConsumerResumedEvent(assignment2);
+			if (childOrSingle instanceof ConsumerPauseResumeEventPublisher publisher) {
+				publisher.publishConsumerResumedEvent(assignment2);
 			}
 		}
 	} // NOSONAR NCSS line count

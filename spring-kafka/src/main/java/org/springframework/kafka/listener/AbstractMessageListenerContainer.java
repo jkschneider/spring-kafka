@@ -614,11 +614,13 @@ public abstract class AbstractMessageListenerContainer<K, V>
 				Object groupIdConfig = this.consumerFactory.getConfigurationProperties()
 						.get(ConsumerConfig.GROUP_ID_CONFIG);
 				hasGroupIdConsumerConfig =
-						groupIdConfig instanceof String && StringUtils.hasText((String) groupIdConfig);
+						groupIdConfig instanceof String s && StringUtils.hasText(s);
 			}
 			Assert.state(hasGroupIdConsumerConfig || StringUtils.hasText(this.containerProperties.getGroupId()),
-					"No group.id found in consumer config, container properties, or @KafkaListener annotation; "
-							+ "a group.id is required when group management is used.");
+					"""
+					No group.id found in consumer config, container properties, or @KafkaListener annotation; \
+					a group.id is required when group management is used.\
+					""");
 		}
 	}
 

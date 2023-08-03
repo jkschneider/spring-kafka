@@ -132,21 +132,21 @@ public class ProjectingMessageConverter extends MessagingMessageConverter {
 	private static byte[] getAsByteArray(Object source) {
 		Assert.notNull(source, "Source must not be null");
 
-		if (source instanceof String) {
-			return ((String) source).getBytes(StandardCharsets.UTF_8);
+		if (source instanceof String string) {
+			return string.getBytes(StandardCharsets.UTF_8);
 		}
 
-		if (source instanceof byte[]) {
-			return (byte[]) source;
+		if (source instanceof byte[] bytes) {
+			return bytes;
 		}
 
-		if (source instanceof Bytes) {
-			return ((Bytes) source).get();
+		if (source instanceof Bytes bytes) {
+			return bytes.get();
 		}
 
-		throw new ConversionException(String.format(
-				"Unsupported payload type '%s'. Expected 'String', 'Bytes', or 'byte[]'",
-				source.getClass()), null);
+		throw new ConversionException(
+				"Unsupported payload type '%s'. Expected 'String', 'Bytes', or 'byte[]'".formatted(
+						source.getClass()), null);
 	}
 
 }

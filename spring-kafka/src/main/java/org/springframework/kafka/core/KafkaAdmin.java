@@ -482,15 +482,17 @@ public class KafkaAdmin extends KafkaResourceFactory
 			try {
 				TopicDescription topicDescription = f.get(this.operationTimeout, TimeUnit.SECONDS);
 				if (topic.numPartitions() >= 0 && topic.numPartitions() < topicDescription.partitions().size()) {
-					LOGGER.info(() -> String.format(
-						"Topic '%s' exists but has a different partition count: %d not %d", n,
-						topicDescription.partitions().size(), topic.numPartitions()));
+					LOGGER.info(() -> 
+							"Topic '%s' exists but has a different partition count: %d not %d".formatted(n,
+									topicDescription.partitions().size(), topic.numPartitions()));
 				}
 				else if (topic.numPartitions() > topicDescription.partitions().size()) {
-					LOGGER.info(() -> String.format(
-						"Topic '%s' exists but has a different partition count: %d not %d, increasing "
-						+ "if the broker supports it", n,
-						topicDescription.partitions().size(), topic.numPartitions()));
+					LOGGER.info(() -> (
+							"""
+							Topic '%s' exists but has a different partition count: %d not %d, increasing \
+							if the broker supports it\
+							""").formatted(n,
+							topicDescription.partitions().size(), topic.numPartitions()));
 					topicsToModify.put(n, NewPartitions.increaseTo(topic.numPartitions()));
 				}
 			}

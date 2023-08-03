@@ -106,8 +106,8 @@ public class FallbackBatchErrorHandlerIntegrationTests {
 			@Override
 			public void accept(ConsumerRecord<?, ?> record, Exception exception) {
 				super.accept(record, exception);
-				if (exception instanceof ListenerExecutionFailedException) {
-					failedGroupId.set(((ListenerExecutionFailedException) exception).getGroupId());
+				if (exception instanceof ListenerExecutionFailedException failedException) {
+					failedGroupId.set(failedException.getGroupId());
 				}
 				recoverLatch.countDown();
 			}
@@ -191,8 +191,8 @@ public class FallbackBatchErrorHandlerIntegrationTests {
 
 			@Override
 			public void accept(ConsumerRecord<?, ?> record, Exception exception) {
-				if (exception instanceof ListenerExecutionFailedException) {
-					failedGroupId.set(((ListenerExecutionFailedException) exception).getGroupId());
+				if (exception instanceof ListenerExecutionFailedException failedException) {
+					failedGroupId.set(failedException.getGroupId());
 				}
 				if (failRecovery.getAndSet(false)) {
 					throw new RuntimeException("Recovery failed");

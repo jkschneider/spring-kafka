@@ -75,8 +75,8 @@ public class RecoveringDeserializationExceptionHandler implements Deserializatio
 	public void configure(Map<String, ?> configs) {
 		if (configs.containsKey(KSTREAM_DESERIALIZATION_RECOVERER)) {
 			Object configValue = configs.get(KSTREAM_DESERIALIZATION_RECOVERER);
-			if (configValue instanceof ConsumerRecordRecoverer) {
-				this.recoverer = (ConsumerRecordRecoverer) configValue;
+			if (configValue instanceof ConsumerRecordRecoverer recordRecoverer) {
+				this.recoverer = recordRecoverer;
 			}
 			else if (configValue instanceof String) {
 				fromString(configValue);

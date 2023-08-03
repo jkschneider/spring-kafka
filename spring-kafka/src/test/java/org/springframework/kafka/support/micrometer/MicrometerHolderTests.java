@@ -78,8 +78,10 @@ public class MicrometerHolderTests {
 	void multiReg() {
 		assertThatIllegalStateException().isThrownBy(() -> new MicrometerHolder(
 					new AnnotationConfigApplicationContext(Config1.class), "", "", "", r -> Collections.emptyMap()))
-				.withMessage("No micrometer registry present (or more than one and "
-						+ "there is not exactly one marked with @Primary)");
+				.withMessage("""
+						No micrometer registry present (or more than one and \
+						there is not exactly one marked with @Primary)\
+						""");
 	}
 
 	@Test

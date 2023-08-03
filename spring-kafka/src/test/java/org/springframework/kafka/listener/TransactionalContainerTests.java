@@ -256,8 +256,8 @@ public class TransactionalContainerTests {
 		CountDownLatch stopEventLatch = new CountDownLatch(1);
 		AtomicReference<ConsumerStoppedEvent> stopEvent = new AtomicReference<>();
 		container.setApplicationEventPublisher(event -> {
-			if (event instanceof ConsumerStoppedEvent) {
-				stopEvent.set((ConsumerStoppedEvent) event);
+			if (event instanceof ConsumerStoppedEvent stoppedEvent) {
+				stopEvent.set(stoppedEvent);
 				stopEventLatch.countDown();
 			}
 		});
@@ -546,8 +546,8 @@ public class TransactionalContainerTests {
 		AtomicReference<Map<TopicPartition, OffsetAndMetadata>> committed = new AtomicReference<>();
 		CountDownLatch idleLatch = new CountDownLatch(1);
 		container.setApplicationEventPublisher(event -> {
-			if (event instanceof ListenerContainerIdleEvent) {
-				Consumer<?, ?> consumer = ((ListenerContainerIdleEvent) event).getConsumer();
+			if (event instanceof ListenerContainerIdleEvent idleEvent) {
+				Consumer<?, ?> consumer = idleEvent.getConsumer();
 				committed.set(consumer.committed(Set.of(new TopicPartition(topic1, 0), new TopicPartition(topic1, 1))));
 				if (committed.get().get(new TopicPartition(topic1, 0)) != null) {
 					idleLatch.countDown();
@@ -645,8 +645,8 @@ public class TransactionalContainerTests {
 		container.setBeanName("testRollbackRecord");
 		AtomicReference<Map<TopicPartition, OffsetAndMetadata>> committed = new AtomicReference<>();
 		container.setApplicationEventPublisher(event -> {
-			if (event instanceof ListenerContainerIdleEvent) {
-				Consumer<?, ?> consumer = ((ListenerContainerIdleEvent) event).getConsumer();
+			if (event instanceof ListenerContainerIdleEvent idleEvent) {
+				Consumer<?, ?> consumer = idleEvent.getConsumer();
 				committed.set(consumer.committed(Set.of(new TopicPartition(topic, 0))));
 				if (committed.get().get(new TopicPartition(topic, 0)) != null) {
 					latch.countDown();

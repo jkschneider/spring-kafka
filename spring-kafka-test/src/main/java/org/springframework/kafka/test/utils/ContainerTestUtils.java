@@ -82,7 +82,7 @@ public final class ContainerTestUtils {
 			}
 		}
 		if (count != partitions) {
-			throw new IllegalStateException(String.format("Expected %d but got %d partitions", partitions, count));
+			throw new IllegalStateException("Expected %d but got %d partitions".formatted(partitions, count));
 		}
 	}
 
@@ -112,7 +112,7 @@ public final class ContainerTestUtils {
 			}
 		}
 		if (count != partitions) {
-			throw new IllegalStateException(String.format("Expected %d but got %d partitions", partitions, count));
+			throw new IllegalStateException("Expected %d but got %d partitions".formatted(partitions, count));
 		}
 	}
 

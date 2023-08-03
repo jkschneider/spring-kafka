@@ -471,9 +471,9 @@ public class RetryTopicConfigurer implements BeanFactoryAware {
 		public static final String DEFAULT_DLT_METHOD_NAME = "logMessage";
 
 		public void logMessage(Object message, @NonNull Acknowledgment ack) {
-			if (message instanceof ConsumerRecord) {
+			if (message instanceof ConsumerRecord record) {
 				LOGGER.info(() -> "Received message in dlt listener: "
-						+ KafkaUtils.format((ConsumerRecord<?, ?>) message));
+						+ KafkaUtils.format(record));
 			}
 			else {
 				LOGGER.info(() -> "Received message in dlt listener.");

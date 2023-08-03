@@ -99,14 +99,14 @@ public class KafkaAvroBeanRegistrationAotProcessor implements BeanRegistrationAo
 			return;
 		}
 		boolean container = isContainer(paramType);
-		if (!container && paramType instanceof Class) {
-			MergedAnnotations mergedAnnotations = MergedAnnotations.from((Class<?>) paramType);
+		if (!container && paramType instanceof Class class1) {
+			MergedAnnotations mergedAnnotations = MergedAnnotations.from(class1);
 			if (mergedAnnotations.isPresent(AVRO_GENERATED_CLASS_NAME)) {
-				avroTypes.add((Class<?>) paramType);
+				avroTypes.add(class1);
 			}
 		}
-		else if (container && paramType instanceof ParameterizedType) {
-			Type[] generics = ((ParameterizedType) paramType).getActualTypeArguments();
+		else if (container && paramType instanceof ParameterizedType type) {
+			Type[] generics = type.getActualTypeArguments();
 			if (generics.length > 0) {
 				checkAvro(generics[0], avroTypes);
 			}
@@ -117,17 +117,17 @@ public class KafkaAvroBeanRegistrationAotProcessor implements BeanRegistrationAo
 	}
 
 	private static void checkAvro(@Nullable Type generic, Set<Class<?>> avroTypes) {
-		if (generic instanceof Class) {
-			MergedAnnotations methodAnnotations = MergedAnnotations.from((Class<?>) generic);
+		if (generic instanceof Class class1) {
+			MergedAnnotations methodAnnotations = MergedAnnotations.from(class1);
 			if (methodAnnotations.isPresent(AVRO_GENERATED_CLASS_NAME)) {
-				avroTypes.add((Class<?>) generic);
+				avroTypes.add(class1);
 			}
 		}
 	}
 
 	private static boolean isContainer(Type paramType) {
-		if (paramType instanceof ParameterizedType) {
-			Type rawType = ((ParameterizedType) paramType).getRawType();
+		if (paramType instanceof ParameterizedType type) {
+			Type rawType = type.getRawType();
 			return (rawType.equals(List.class))
 					|| rawType.getTypeName().equals(CONSUMER_RECORD_CLASS_NAME)
 					|| rawType.getTypeName().equals(CONSUMER_RECORDS_CLASS_NAME);

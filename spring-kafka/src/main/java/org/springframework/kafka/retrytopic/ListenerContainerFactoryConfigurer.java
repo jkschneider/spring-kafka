@@ -142,8 +142,10 @@ public class ListenerContainerFactoryConfigurer {
 		Assert.notNull(exceptionTypes, "The exception types cannot be null");
 		Assert.noNullElements(exceptionTypes, "The exception types cannot have null elements");
 		Assert.state(this.blockingExceptionTypes == null,
-				() -> "Blocking retryable exceptions have already been set."
-						+  "Current ones: " + Arrays.toString(this.blockingExceptionTypes)
+				() -> """
+						Blocking retryable exceptions have already been set.\
+						Current ones: \
+						""" + Arrays.toString(this.blockingExceptionTypes)
 						+ " You provided: " + Arrays.toString(exceptionTypes));
 		this.blockingExceptionTypes = Arrays.copyOf(exceptionTypes, exceptionTypes.length);
 	}
@@ -200,7 +202,7 @@ public class ListenerContainerFactoryConfigurer {
 	@SuppressWarnings("unchecked")
 	private <T> T checkAndCast(Object obj, Class<T> clazz) {
 		Assert.isAssignable(clazz, obj.getClass(),
-				() -> String.format("The provided class %s is not assignable from %s",
+				() -> "The provided class %s is not assignable from %s".formatted(
 						obj.getClass().getSimpleName(), clazz.getSimpleName()));
 		return (T) obj;
 	}

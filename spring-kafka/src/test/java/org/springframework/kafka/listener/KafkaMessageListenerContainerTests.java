@@ -235,8 +235,7 @@ public class KafkaMessageListenerContainerTests {
 		container.setBeanName("delegate");
 		AtomicReference<List<TopicPartitionOffset>> offsets = new AtomicReference<>();
 		container.setApplicationEventPublisher(e -> {
-			if (e instanceof ConsumerStoppingEvent) {
-				ConsumerStoppingEvent event = (ConsumerStoppingEvent) e;
+			if (e instanceof ConsumerStoppingEvent event) {
 				offsets.set(event.getPartitions().stream()
 						.map(p -> new TopicPartitionOffset(p.topic(), p.partition(),
 								event.getConsumer().position(p, Duration.ofMillis(10_000))))
@@ -3299,8 +3298,8 @@ public class KafkaMessageListenerContainerTests {
 		CountDownLatch containerStarted = new CountDownLatch(2);
 
 		container.setApplicationEventPublisher(e -> {
-			if (e instanceof ConsumerStoppedEvent) {
-				reason.set(((ConsumerStoppedEvent) e).getReason());
+			if (e instanceof ConsumerStoppedEvent event) {
+				reason.set(event.getReason());
 				consumerStopped.countDown();
 			}
 			else if (e instanceof ContainerStoppedEvent) {
@@ -3352,8 +3351,8 @@ public class KafkaMessageListenerContainerTests {
 		CountDownLatch containerStopped = new CountDownLatch(1);
 
 		container.setApplicationEventPublisher(e -> {
-			if (e instanceof ConsumerStoppedEvent) {
-				reason.set(((ConsumerStoppedEvent) e).getReason());
+			if (e instanceof ConsumerStoppedEvent event) {
+				reason.set(event.getReason());
 				consumerStopped.countDown();
 			}
 			else if (e instanceof ContainerStoppedEvent) {
@@ -3397,8 +3396,8 @@ public class KafkaMessageListenerContainerTests {
 		KafkaMessageListenerContainer<Integer, String> container =
 				new KafkaMessageListenerContainer<>(cf, containerProps);
 		container.setApplicationEventPublisher(e -> {
-			if (e instanceof ConsumerRetryAuthEvent) {
-				reason.set(((ConsumerRetryAuthEvent) e).getReason());
+			if (e instanceof ConsumerRetryAuthEvent event) {
+				reason.set(event.getReason());
 				retryEvent.countDown();
 			}
 			else if (e instanceof ConsumerRetryAuthSuccessfulEvent) {

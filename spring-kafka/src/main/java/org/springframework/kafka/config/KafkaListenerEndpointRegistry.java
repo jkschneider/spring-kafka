@@ -91,8 +91,8 @@ public class KafkaListenerEndpointRegistry implements ListenerContainerRegistry,
 
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		if (applicationContext instanceof ConfigurableApplicationContext) {
-			this.applicationContext = (ConfigurableApplicationContext) applicationContext;
+		if (applicationContext instanceof ConfigurableApplicationContext context) {
+			this.applicationContext = context;
 		}
 	}
 
@@ -267,11 +267,9 @@ public class KafkaListenerEndpointRegistry implements ListenerContainerRegistry,
 	protected MessageListenerContainer createListenerContainer(KafkaListenerEndpoint endpoint,
 			KafkaListenerContainerFactory<?> factory) {
 
-		if (endpoint instanceof MethodKafkaListenerEndpoint) {
-			MethodKafkaListenerEndpoint<?, ?> mkle = (MethodKafkaListenerEndpoint<?, ?>) endpoint;
+		if (endpoint instanceof MethodKafkaListenerEndpoint mkle) {
 			Object bean = mkle.getBean();
-			if (bean instanceof EndpointHandlerMethod) {
-				EndpointHandlerMethod ehm = (EndpointHandlerMethod) bean;
+			if (bean instanceof EndpointHandlerMethod ehm) {
 				ehm = new EndpointHandlerMethod(ehm.resolveBean(this.applicationContext), ehm.getMethodName());
 				mkle.setBean(ehm.resolveBean(this.applicationContext));
 				mkle.setMethod(ehm.getMethod());
@@ -279,9 +277,9 @@ public class KafkaListenerEndpointRegistry implements ListenerContainerRegistry,
 		}
 		MessageListenerContainer listenerContainer = factory.createListenerContainer(endpoint);
 
-		if (listenerContainer instanceof InitializingBean) {
+		if (listenerContainer instanceof InitializingBean bean) {
 			try {
-				((InitializingBean) listenerContainer).afterPropertiesSet();
+				bean.afterPropertiesSet();
 			}
 			catch (Exception ex) {
 				throw new BeanInitializationException("Failed to initialize message listener container", ex);
@@ -292,8 +290,10 @@ public class KafkaListenerEndpointRegistry implements ListenerContainerRegistry,
 		if (listenerContainer.isAutoStartup() &&
 				containerPhase != AbstractMessageListenerContainer.DEFAULT_PHASE) {  // a custom phase value
 			if (this.phase != AbstractMessageListenerContainer.DEFAULT_PHASE && this.phase != containerPhase) {
-				throw new IllegalStateException("Encountered phase mismatch between container "
-						+ "factory definitions: " + this.phase + " vs " + containerPhase);
+				throw new IllegalStateException("""
+						Encountered phase mismatch between container \
+						factory definitions: \
+						""" + this.phase + " vs " + containerPhase);
 			}
 			this.phase = listenerContainer.getPhase();
 		}

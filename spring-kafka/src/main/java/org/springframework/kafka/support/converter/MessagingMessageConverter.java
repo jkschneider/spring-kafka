@@ -168,8 +168,8 @@ public class MessagingMessageConverter implements RecordMessageConverter {
 	 */
 	public void setMessagingConverter(SmartMessageConverter messagingConverter) {
 		this.messagingConverter = messagingConverter;
-		if (messagingConverter != null && this.headerMapper instanceof AbstractKafkaHeaderMapper) {
-			((AbstractKafkaHeaderMapper) this.headerMapper).addRawMappedHeader(MessageHeaders.CONTENT_TYPE, true);
+		if (messagingConverter != null && this.headerMapper instanceof AbstractKafkaHeaderMapper mapper) {
+			mapper.addRawMappedHeader(MessageHeaders.CONTENT_TYPE, true);
 		}
 	}
 
@@ -192,8 +192,8 @@ public class MessagingMessageConverter implements RecordMessageConverter {
 		}
 		Message<?> message = MessageBuilder.createMessage(extractAndConvertValue(record, type), kafkaMessageHeaders);
 		if (this.messagingConverter != null && !message.getPayload().equals(KafkaNull.INSTANCE)) {
-			Class<?> clazz = type instanceof Class ? (Class<?>) type : type instanceof ParameterizedType
-					? (Class<?>) ((ParameterizedType) type).getRawType() : Object.class;
+			Class<?> clazz = type instanceof Class c ? c : type instanceof ParameterizedType pt
+					? (Class<?>) pt.getRawType() : Object.class;
 			Object payload = this.messagingConverter.fromMessage(message, clazz, type);
 			if (payload != null) {
 				message = new GenericMessage<>(payload, message.getHeaders());
@@ -208,8 +208,10 @@ public class MessagingMessageConverter implements RecordMessageConverter {
 		}
 		else {
 			this.logger.debug(() ->
-					"No header mapper is available; Jackson is required for the default mapper; "
-					+ "headers (if present) are not mapped but provided raw in "
+					"""
+					No header mapper is available; Jackson is required for the default mapper; \
+					headers (if present) are not mapped but provided raw in \
+					"""
 					+ KafkaHeaders.NATIVE_HEADERS);
 			rawHeaders.put(KafkaHeaders.NATIVE_HEADERS, record.headers());
 			Header contentType = record.headers().lastHeader(MessageHeaders.CONTENT_TYPE);
@@ -233,11 +235,11 @@ public class MessagingMessageConverter implements RecordMessageConverter {
 		MessageHeaders headers = message.getHeaders();
 		Object topicHeader = headers.get(KafkaHeaders.TOPIC);
 		String topic = null;
-		if (topicHeader instanceof byte[]) {
-			topic = new String(((byte[]) topicHeader), StandardCharsets.UTF_8);
+		if (topicHeader instanceof byte[] bytes) {
+			topic = new String(bytes, StandardCharsets.UTF_8);
 		}
-		else if (topicHeader instanceof String) {
-			topic = (String) topicHeader;
+		else if (topicHeader instanceof String string) {
+			topic = string;
 		}
 		else if (topicHeader == null) {
 			Assert.state(defaultTopic != null, "With no topic header, a defaultTopic is required");

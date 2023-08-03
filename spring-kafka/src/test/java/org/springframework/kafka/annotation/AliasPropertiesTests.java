@@ -113,8 +113,8 @@ public class AliasPropertiesTests {
 		@Bean
 		public static AnnotationEnhancer mainEnhancer() {
 			return (attrs, element) -> {
-				attrs.put("groupId", attrs.get("id") + "." + (element instanceof Class
-						? ((Class<?>) element).getSimpleName()
+				attrs.put("groupId", attrs.get("id") + "." + (element instanceof Class c
+						? c.getSimpleName()
 						: ((Method) element).getDeclaringClass().getSimpleName()
 								+  "." + ((Method) element).getName()));
 				orderedCalledFirst.set(true);

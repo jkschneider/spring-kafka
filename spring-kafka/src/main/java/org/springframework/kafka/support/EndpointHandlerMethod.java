@@ -66,8 +66,8 @@ public class EndpointHandlerMethod {
 	 * @return the method.
 	 */
 	public Method getMethod() {
-		if (this.beanOrClass instanceof Class) {
-			return forClass((Class<?>) this.beanOrClass);
+		if (this.beanOrClass instanceof Class class1) {
+			return forClass(class1);
 		}
 		Assert.state(this.bean != null, "Bean must be resolved before accessing its method");
 		if (this.bean instanceof EndpointHandlerMethod) {
@@ -91,13 +91,12 @@ public class EndpointHandlerMethod {
 	}
 
 	public Object resolveBean(BeanFactory beanFactory) {
-		if (this.bean instanceof EndpointHandlerMethod) {
-			return ((EndpointHandlerMethod) this.bean).beanOrClass;
+		if (this.bean instanceof EndpointHandlerMethod handlerMethod) {
+			return handlerMethod.beanOrClass;
 		}
 		if (this.bean == null) {
 			try {
-				if (this.beanOrClass instanceof Class) {
-					Class<?> clazz = (Class<?>) this.beanOrClass;
+				if (this.beanOrClass instanceof Class clazz) {
 					try {
 						this.bean = beanFactory.getBean(clazz);
 					}
@@ -126,7 +125,7 @@ public class EndpointHandlerMethod {
 					.filter(mthd -> mthd.getName().equals(this.methodName))
 					.findFirst()
 					.orElseThrow(() -> new IllegalArgumentException(
-							String.format("No method %s in class %s", this.methodName, clazz)));
+					"No method %s in class %s".formatted(this.methodName, clazz)));
 		}
 		return this.method;
 	}

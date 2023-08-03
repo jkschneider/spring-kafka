@@ -52,15 +52,15 @@ public class RetryTopicSchedulerWrapper implements InitializingBean, DisposableB
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		if (this.scheduler instanceof InitializingBean) {
-			((InitializingBean) this.scheduler).afterPropertiesSet();
+		if (this.scheduler instanceof InitializingBean bean) {
+			bean.afterPropertiesSet();
 		}
 	}
 
 	@Override
 	public void destroy() throws Exception {
-		if (this.scheduler instanceof DisposableBean) {
-			((DisposableBean) this.scheduler).destroy();
+		if (this.scheduler instanceof DisposableBean bean) {
+			bean.destroy();
 		}
 
 	}

@@ -70,7 +70,7 @@ public class CompositeProducerInterceptor<K, V> implements ProducerInterceptor<K
 				// if exception thrown, log and continue calling other interceptors.
 				if (record != null) {
 					CompositeProducerInterceptor.this.logger.warn(e, () ->
-							String.format("Error executing interceptor onSend callback for topic: %s, partition: %d",
+							"Error executing interceptor onSend callback for topic: %s, partition: %d".formatted(
 									record.topic(), record.partition()));
 				}
 				else {

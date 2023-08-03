@@ -189,9 +189,9 @@ public class KafkaListenerEndpointRegistrar implements BeanFactoryAware, Initial
 	protected void registerAllEndpoints() {
 		synchronized (this.endpointDescriptors) {
 			for (KafkaListenerEndpointDescriptor descriptor : this.endpointDescriptors) {
-				if (descriptor.endpoint instanceof MultiMethodKafkaListenerEndpoint
+				if (descriptor.endpoint instanceof MultiMethodKafkaListenerEndpoint endpoint
 						&& this.validator != null) {
-					((MultiMethodKafkaListenerEndpoint) descriptor.endpoint).setValidator(this.validator);
+					endpoint.setValidator(this.validator);
 				}
 				this.endpointRegistry.registerListenerContainer(
 						descriptor.endpoint, resolveContainerFactory(descriptor));

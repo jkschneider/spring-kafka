@@ -91,8 +91,8 @@ public class LoggingProducerListener<K, V> implements ProducerListener<K, V> {
 	}
 
 	private String keyOrValue(Object keyOrValue) {
-		if (keyOrValue instanceof byte[]) {
-			return "byte[" + ((byte[]) keyOrValue).length + "]";
+		if (keyOrValue instanceof byte[] bytes) {
+			return "byte[" + bytes.length + "]";
 		}
 		else {
 			return toDisplayString(ObjectUtils.nullSafeToString(keyOrValue), this.maxContentLogged);

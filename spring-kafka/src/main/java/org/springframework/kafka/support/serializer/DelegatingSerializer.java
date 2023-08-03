@@ -106,15 +106,15 @@ public class DelegatingSerializer implements Serializer<Object> {
 		}
 		else if (value instanceof Map) {
 			((Map<String, Object>) value).forEach((selector, serializer) -> {
-				if (serializer instanceof Serializer) {
-					this.delegates.put(selector, (Serializer<?>) serializer);
-					((Serializer<?>) serializer).configure(configs, isKey);
+				if (serializer instanceof Serializer serializer1) {
+					this.delegates.put(selector, serializer1);
+					serializer1.configure(configs, isKey);
 				}
-				else if (serializer instanceof Class) {
-					instantiateAndConfigure(configs, isKey, this.delegates, selector, (Class<?>) serializer);
+				else if (serializer instanceof Class class1) {
+					instantiateAndConfigure(configs, isKey, this.delegates, selector, class1);
 				}
-				else if (serializer instanceof String) {
-					createInstanceAndConfigure(configs, isKey, this.delegates, selector, (String) serializer);
+				else if (serializer instanceof String string) {
+					createInstanceAndConfigure(configs, isKey, this.delegates, selector, string);
 				}
 				else {
 					throw new IllegalStateException(configKey
@@ -122,8 +122,8 @@ public class DelegatingSerializer implements Serializer<Object> {
 				}
 			});
 		}
-		else if (value instanceof String) {
-			this.delegates.putAll(createDelegates((String) value, configs, isKey));
+		else if (value instanceof String string) {
+			this.delegates.putAll(createDelegates(string, configs, isKey));
 		}
 		else {
 			throw new IllegalStateException(

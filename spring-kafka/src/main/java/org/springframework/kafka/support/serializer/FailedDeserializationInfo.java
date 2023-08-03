@@ -80,8 +80,10 @@ public class FailedDeserializationInfo {
 
 	@Override
 	public String toString() {
-		return "FailedDeserializationInfo{" +
-				"topic='" + this.topic + '\'' +
+		return """
+				FailedDeserializationInfo{\
+				topic='\
+				""" + this.topic + '\'' +
 				", headers=" + this.headers +
 				", data=" + Arrays.toString(this.data) +
 				", isForKey=" + this.isForKey +

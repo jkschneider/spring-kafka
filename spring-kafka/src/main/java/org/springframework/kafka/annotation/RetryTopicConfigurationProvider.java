@@ -72,8 +72,8 @@ public class RetryTopicConfigurationProvider {
 	 * @param beanFactory the bean factory.
 	 */
 	public RetryTopicConfigurationProvider(BeanFactory beanFactory) {
-		this(beanFactory, new StandardBeanExpressionResolver(), beanFactory instanceof ConfigurableBeanFactory
-				? new BeanExpressionContext((ConfigurableBeanFactory) beanFactory, null)
+		this(beanFactory, new StandardBeanExpressionResolver(), beanFactory instanceof ConfigurableBeanFactory cbf
+				? new BeanExpressionContext(cbf, null)
 				: null); // NOSONAR
 	}
 

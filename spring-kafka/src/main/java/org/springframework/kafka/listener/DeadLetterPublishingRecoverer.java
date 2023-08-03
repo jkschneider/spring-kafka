@@ -555,8 +555,10 @@ public class DeadLetterPublishingRecoverer extends ExceptionClassifier implement
 	}
 
 	private void maybeThrow(ConsumerRecord<?, ?> record, Exception exception) {
-		String message = String.format("No destination returned for record %s and exception %s. " +
-				"failIfNoDestinationReturned: %s", KafkaUtils.format(record), exception,
+		String message = ("""
+				No destination returned for record %s and exception %s. \
+				failIfNoDestinationReturned: %s\
+				""").formatted(KafkaUtils.format(record), exception,
 				this.throwIfNoDestinationReturned);
 		this.logger.warn(message);
 		if (this.throwIfNoDestinationReturned) {
@@ -775,8 +777,8 @@ public class DeadLetterPublishingRecoverer extends ExceptionClassifier implement
 		maybeAddHeader(kafkaHeaders, this.headerNames.original.timestampTypeHeader,
 				() -> record.timestampType().toString().getBytes(StandardCharsets.UTF_8),
 				HeaderNames.HeadersToAdd.TS_TYPE);
-		if (ex instanceof ListenerExecutionFailedException) {
-			String consumerGroup = ((ListenerExecutionFailedException) ex).getGroupId();
+		if (ex instanceof ListenerExecutionFailedException exception) {
+			String consumerGroup = exception.getGroupId();
 			if (consumerGroup != null) {
 				maybeAddHeader(kafkaHeaders, this.headerNames.original.consumerGroup,
 						() -> consumerGroup.getBytes(StandardCharsets.UTF_8), HeaderNames.HeadersToAdd.GROUP);

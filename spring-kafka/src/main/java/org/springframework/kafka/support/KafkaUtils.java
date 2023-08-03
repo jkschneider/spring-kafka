@@ -68,8 +68,7 @@ public final class KafkaUtils {
 		if (returnType.equals(Message.class)) {
 			return true;
 		}
-		if (returnType instanceof ParameterizedType) {
-			ParameterizedType prt = (ParameterizedType) returnType;
+		if (returnType instanceof ParameterizedType prt) {
 			Type rawType = prt.getRawType();
 			if (rawType.equals(Message.class)) {
 				return true;
@@ -79,8 +78,8 @@ public final class KafkaUtils {
 				if (collectionType.equals(Message.class)) {
 					return true;
 				}
-				return collectionType instanceof ParameterizedType
-						&& ((ParameterizedType) collectionType).getRawType().equals(Message.class);
+				return collectionType instanceof ParameterizedType pt
+						&& pt.getRawType().equals(Message.class);
 			}
 		}
 		return false;
@@ -129,12 +128,12 @@ public final class KafkaUtils {
 	 */
 	public static Duration determineSendTimeout(Map<String, Object> producerProps, long buffer, long min) {
 		Object dt = producerProps.get(ProducerConfig.DELIVERY_TIMEOUT_MS_CONFIG);
-		if (dt instanceof Number) {
-			return Duration.ofMillis(Math.max(((Number) dt).longValue() + buffer, min));
+		if (dt instanceof Number number) {
+			return Duration.ofMillis(Math.max(number.longValue() + buffer, min));
 		}
-		else if (dt instanceof String) {
+		else if (dt instanceof String string) {
 			try {
-				return Duration.ofMillis(Math.max(Long.parseLong((String) dt) + buffer, min));
+				return Duration.ofMillis(Math.max(Long.parseLong(string) + buffer, min));
 			}
 			catch (@SuppressWarnings("unused") NumberFormatException ex) {
 			}

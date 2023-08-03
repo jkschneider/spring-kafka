@@ -68,11 +68,11 @@ public class ToStringSerializer<T> implements Serializer<T> {
 
 		if (configs.containsKey(ADD_TYPE_INFO_HEADERS)) {
 			Object config = configs.get(ADD_TYPE_INFO_HEADERS);
-			if (config instanceof Boolean) {
-				this.addTypeInfo = (Boolean) config;
+			if (config instanceof Boolean boolean1) {
+				this.addTypeInfo = boolean1;
 			}
-			else if (config instanceof String) {
-				this.addTypeInfo = Boolean.parseBoolean((String) config);
+			else if (config instanceof String string) {
+				this.addTypeInfo = Boolean.parseBoolean(string);
 			}
 			else {
 				throw new IllegalStateException(

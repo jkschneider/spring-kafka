@@ -51,8 +51,8 @@ public abstract class AbstractDelegatingMessageListenerAdapter<T>
 	public AbstractDelegatingMessageListenerAdapter(T delegate) {
 		this.delegate = delegate;
 		this.delegateType = ListenerUtils.determineListenerType(delegate);
-		if (delegate instanceof ConsumerSeekAware) {
-			this.seekAware = (ConsumerSeekAware) delegate;
+		if (delegate instanceof ConsumerSeekAware aware) {
+			this.seekAware = aware;
 		}
 		else {
 			this.seekAware = null;

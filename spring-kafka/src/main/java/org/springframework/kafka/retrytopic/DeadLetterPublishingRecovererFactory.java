@@ -297,7 +297,7 @@ public class DeadLetterPublishingRecovererFactory {
 
 	private static String getRecordInfo(ConsumerRecord<?, ?> cr) {
 		Header originalTopicHeader = cr.headers().lastHeader(KafkaHeaders.ORIGINAL_TOPIC);
-		return String.format("topic = %s, partition = %s, offset = %s, main topic = %s",
+		return "topic = %s, partition = %s, offset = %s, main topic = %s".formatted(
 				cr.topic(), cr.partition(), cr.offset(),
 				originalTopicHeader != null ? new String(originalTopicHeader.value()) : cr.topic());
 	}
@@ -377,13 +377,13 @@ public class DeadLetterPublishingRecovererFactory {
 				.resolveDestinationTopic(mainListenerId, consumerRecord.topic(), getAttempts(consumerRecord), e,
 						originalTimestamp)
 				.getDestinationDelay();
-		LOGGER.debug(() -> String.format("FailureTimestamp: %s, Original timestamp: %s, nextExecutionTimestamp: %s",
+		LOGGER.debug(() -> "FailureTimestamp: %s, Original timestamp: %s, nextExecutionTimestamp: %s".formatted(
 				failureTimestamp, originalTimestamp, nextExecutionTimestamp));
 		return nextExecutionTimestamp;
 	}
 
 	private long getFailureTimestamp(Exception e) {
-		return e instanceof NestedRuntimeException && ((NestedRuntimeException) e).contains(TimestampedException.class)
+		return e instanceof NestedRuntimeException nre && nre.contains(TimestampedException.class)
 					? getTimestampedException(e).getTimestamp()
 					: Instant.now().toEpochMilli();
 	}

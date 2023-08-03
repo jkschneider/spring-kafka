@@ -125,7 +125,7 @@ public class ErrorHandlingDeserializer<T> implements Deserializer<T> {
 		if (configs.containsKey(configKey)) {
 			try {
 				Object value = configs.get(configKey);
-				Class<?> clazz = value instanceof Class ? (Class<?>) value : ClassUtils.forName((String) value, null);
+				Class<?> clazz = value instanceof Class c ? c : ClassUtils.forName((String) value, null);
 				this.delegate = setupDelegate(clazz.getDeclaredConstructor().newInstance());
 			}
 			catch (Exception e) {
@@ -145,7 +145,7 @@ public class ErrorHandlingDeserializer<T> implements Deserializer<T> {
 		if (configs.containsKey(configKey)) {
 			try {
 				Object value = configs.get(configKey);
-				Class<?> clazz = value instanceof Class ? (Class<?>) value : ClassUtils.forName((String) value, null);
+				Class<?> clazz = value instanceof Class c ? c : ClassUtils.forName((String) value, null);
 				Assert.isTrue(Function.class.isAssignableFrom(clazz), "'function' must be a 'Function ', not a "
 						+ clazz.getName());
 				this.failedDeserializationFunction = (Function<FailedDeserializationInfo, T>)

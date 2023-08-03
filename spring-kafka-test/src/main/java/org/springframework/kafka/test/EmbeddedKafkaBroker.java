@@ -397,18 +397,18 @@ public class EmbeddedKafkaBroker implements InitializingBean, DisposableBean {
 		String exitMsg = "Exit.%s(%d, %s) called";
 		Exit.setExitProcedure((statusCode, message) -> {
 			if (logger.isDebugEnabled()) {
-				logger.debug(new RuntimeException(), String.format(exitMsg, "exit", statusCode, message));
+				logger.debug(new RuntimeException(), exitMsg.formatted("exit", statusCode, message));
 			}
 			else {
-				logger.warn(String.format(exitMsg, "exit", statusCode, message));
+				logger.warn(exitMsg.formatted("exit", statusCode, message));
 			}
 		});
 		Exit.setHaltProcedure((statusCode, message) -> {
 			if (logger.isDebugEnabled()) {
-				logger.debug(new RuntimeException(), String.format(exitMsg, "halt", statusCode, message));
+				logger.debug(new RuntimeException(), exitMsg.formatted("halt", statusCode, message));
 			}
 			else {
-				logger.warn(String.format(exitMsg, "halt", statusCode, message));
+				logger.warn(exitMsg.formatted("halt", statusCode, message));
 			}
 		});
 	}

@@ -254,8 +254,8 @@ public class KafkaListenerAnnotationBeanPostProcessor<K, V>
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		this.applicationContext = applicationContext;
-		if (applicationContext instanceof ConfigurableApplicationContext) {
-			setBeanFactory(((ConfigurableApplicationContext) applicationContext).getBeanFactory());
+		if (applicationContext instanceof ConfigurableApplicationContext context) {
+			setBeanFactory(context.getBeanFactory());
 		}
 		else {
 			setBeanFactory(applicationContext);
@@ -578,8 +578,10 @@ public class KafkaListenerAnnotationBeanPostProcessor<K, V>
 			return this.beanFactory
 				.getBean(RetryTopicBeanNames.RETRY_TOPIC_CONFIGURER_BEAN_NAME, RetryTopicConfigurer.class);
 		}
-		throw new IllegalStateException("When there is no RetryTopicConfigurationSupport bean, the application context "
-				+ "must be a GenericApplicationContext");
+		throw new IllegalStateException("""
+				When there is no RetryTopicConfigurationSupport bean, the application context \
+				must be a GenericApplicationContext\
+				""");
 	}
 
 	private Method checkProxy(Method methodArg, Object bean) {
@@ -604,12 +606,14 @@ public class KafkaListenerAnnotationBeanPostProcessor<K, V>
 				ReflectionUtils.handleReflectionException(ex);
 			}
 			catch (NoSuchMethodException ex) {
-				throw new IllegalStateException(String.format(
-						"@KafkaListener method '%s' found on bean target class '%s', " +
-								"but not found in any interface(s) for bean JDK proxy. Either " +
-								"pull the method up to an interface or switch to subclass (CGLIB) " +
-								"proxies by setting proxy-target-class/proxyTargetClass " +
-								"attribute to 'true'", method.getName(),
+				throw new IllegalStateException((
+						"""
+						@KafkaListener method '%s' found on bean target class '%s', \
+						but not found in any interface(s) for bean JDK proxy. Either \
+						pull the method up to an interface or switch to subclass (CGLIB) \
+						proxies by setting proxy-target-class/proxyTargetClass \
+						attribute to 'true'\
+						""").formatted(method.getName(),
 						method.getDeclaringClass().getSimpleName()), ex);
 			}
 		}
@@ -721,8 +725,8 @@ public class KafkaListenerAnnotationBeanPostProcessor<K, V>
 		KafkaListenerContainerFactory<?> factory = null;
 
 		Object resolved = resolveExpression(containerFactory);
-		if (resolved instanceof KafkaListenerContainerFactory) {
-			return (KafkaListenerContainerFactory<?>) resolved;
+		if (resolved instanceof KafkaListenerContainerFactory listenerContainerFactory) {
+			return listenerContainerFactory;
 		}
 		String containerFactoryBeanName = resolveExpressionAsString(containerFactory,
 				"containerFactory");
@@ -766,8 +770,7 @@ public class KafkaListenerAnnotationBeanPostProcessor<K, V>
 						loadProperty(properties, prop, prop);
 					}
 				}
-				else if (value instanceof Collection) {
-					Collection<?> values = (Collection<?>) value;
+				else if (value instanceof Collection values) {
 					if (!values.isEmpty() && values.iterator().next() instanceof String) {
 						for (String prop : (Collection<String>) value) {
 							loadProperty(properties, prop, prop);
@@ -775,8 +778,10 @@ public class KafkaListenerAnnotationBeanPostProcessor<K, V>
 					}
 				}
 				else {
-					throw new IllegalStateException("'properties' must resolve to a String, a String[] or "
-							+ "Collection<String>");
+					throw new IllegalStateException("""
+							'properties' must resolve to a String, a String[] or \
+							Collection<String>\
+							""");
 				}
 			}
 			endpoint.setConsumerProperties(properties);
@@ -897,9 +902,9 @@ public class KafkaListenerAnnotationBeanPostProcessor<K, V>
 			initialOffset = lng;
 		}
 		else {
-			throw new IllegalArgumentException(String.format(
-					"@PartitionOffset for topic '%s' can't resolve '%s' as a Long or String, resolved to '%s'",
-					topic, partitionOffset.initialOffset(), initialOffsetValue.getClass()));
+			throw new IllegalArgumentException(
+					"@PartitionOffset for topic '%s' can't resolve '%s' as a Long or String, resolved to '%s'".formatted(
+							topic, partitionOffset.initialOffset(), initialOffsetValue.getClass()));
 		}
 		return initialOffset;
 	}
@@ -914,9 +919,9 @@ public class KafkaListenerAnnotationBeanPostProcessor<K, V>
 			relativeToCurrent = bool;
 		}
 		else {
-			throw new IllegalArgumentException(String.format(
-					"@PartitionOffset for topic '%s' can't resolve '%s' as a Boolean or String, resolved to '%s'",
-					topic, partitionOffset.relativeToCurrent(), relativeToCurrentValue.getClass()));
+			throw new IllegalArgumentException(
+					"@PartitionOffset for topic '%s' can't resolve '%s' as a Boolean or String, resolved to '%s'".formatted(
+							topic, partitionOffset.relativeToCurrent(), relativeToCurrentValue.getClass()));
 		}
 		return relativeToCurrent;
 	}
@@ -931,14 +936,14 @@ public class KafkaListenerAnnotationBeanPostProcessor<K, V>
 		else if (resolvedValue instanceof String str) {
 			result.add(str);
 		}
-		else if (resolvedValue instanceof Iterable) {
-			for (Object object : (Iterable<Object>) resolvedValue) {
+		else if (resolvedValue instanceof Iterable iterable) {
+			for (Object object : iterable) {
 				resolveAsString(object, result);
 			}
 		}
 		else {
-			throw new IllegalArgumentException(String.format(
-					"@KafKaListener can't resolve '%s' as a String", resolvedValue));
+			throw new IllegalArgumentException(
+					"@KafKaListener can't resolve '%s' as a String".formatted(resolvedValue));
 		}
 	}
 
@@ -960,7 +965,7 @@ public class KafkaListenerAnnotationBeanPostProcessor<K, V>
 			if (checkDups) {
 				collected.forEach(tpo -> {
 					Assert.state(!result.contains(tpo), () ->
-							String.format("@TopicPartition can't have the same partition configuration twice: [%s]",
+							"@TopicPartition can't have the same partition configuration twice: [%s]".formatted(
 									tpo));
 				});
 			}
@@ -974,14 +979,14 @@ public class KafkaListenerAnnotationBeanPostProcessor<K, V>
 		else if (resolvedValue instanceof Integer intgr) {
 			result.add(new TopicPartitionOffset(topic, intgr));
 		}
-		else if (resolvedValue instanceof Iterable) {
-			for (Object object : (Iterable<Object>) resolvedValue) {
+		else if (resolvedValue instanceof Iterable iterable) {
+			for (Object object : iterable) {
 				resolvePartitionAsInteger(topic, object, result, offset, isRelative, checkDups);
 			}
 		}
 		else {
-			throw new IllegalArgumentException(String.format(
-					"@KafKaListener for topic '%s' can't resolve '%s' as an Integer or String", topic, resolvedValue));
+			throw new IllegalArgumentException(
+					"@KafKaListener for topic '%s' can't resolve '%s' as an Integer or String".formatted(topic, resolvedValue));
 		}
 	}
 

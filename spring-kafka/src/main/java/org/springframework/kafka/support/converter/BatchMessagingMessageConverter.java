@@ -177,15 +177,17 @@ public class BatchMessagingMessageConverter implements BatchMessageConverter {
 				this.headerMapper.toHeaders(record.headers(), converted);
 				convertedHeaders.add(converted);
 				Object object = converted.get(KafkaHeaders.LISTENER_INFO);
-				if (object instanceof String) {
-					info = (String) object;
+				if (object instanceof String string) {
+					info = string;
 				}
 			}
 			else {
 				if (!logged) {
 					this.logger.debug(() ->
-						"No header mapper is available; Jackson is required for the default mapper; "
-						+ "headers (if present) are not mapped but provided raw in "
+						"""
+						No header mapper is available; Jackson is required for the default mapper; \
+						headers (if present) are not mapped but provided raw in \
+						"""
 						+ KafkaHeaders.NATIVE_HEADERS);
 					logged = true;
 				}
@@ -270,8 +272,10 @@ public class BatchMessagingMessageConverter implements BatchMessageConverter {
 				conversionFailures.add(ex);
 				return null;
 			}
-			throw new ConversionException("The batch converter can only report conversion failures to the listener "
-					+ "if the record.value() is byte[], Bytes, or String", ex);
+			throw new ConversionException("""
+					The batch converter can only report conversion failures to the listener \
+					if the record.value() is byte[], Bytes, or String\
+					""", ex);
 		}
 	}
 
@@ -282,8 +286,8 @@ public class BatchMessagingMessageConverter implements BatchMessageConverter {
 	 * @return true if the conditions are met.
 	 */
 	private boolean containerType(Type type) {
-		return type instanceof ParameterizedType
-				&& ((ParameterizedType) type).getActualTypeArguments().length == 1;
+		return type instanceof ParameterizedType pt
+				&& pt.getActualTypeArguments().length == 1;
 	}
 
 }

@@ -19,3 +19,9 @@ project.afterEvaluate {
     project.tasks.artifactoryPublish.enabled(false)
 
 }
+
+dependencies {
+	compileOnly "com.sun.xml.ws:jaxws-rt:2.3.6"
+
+	testImplementation "com.sun.xml.ws:jaxws-rt:2.3.6"
+}

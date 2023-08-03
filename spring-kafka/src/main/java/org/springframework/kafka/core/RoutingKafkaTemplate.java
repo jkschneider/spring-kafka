@@ -70,7 +70,7 @@ public class RoutingKafkaTemplate extends KafkaTemplate<Object, Object> {
 		Optional<Boolean> transactional = factories.values().stream()
 			.map(fact -> fact.transactionCapable())
 			.findFirst();
-		Assert.isTrue(!transactional.isPresent() || !transactional.get(), "Transactional factories are not supported");
+		Assert.isTrue(transactional.isEmpty() || !transactional.get(), "Transactional factories are not supported");
 	}
 
 	@Override

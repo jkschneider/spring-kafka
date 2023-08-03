@@ -141,7 +141,7 @@ public class EndpointCustomizerFactory {
 
 		if (topics.isEmpty()) {
 			throw new IllegalStateException(
-					String.format("No topics were provided for RetryTopicConfiguration for method %s in class %s.",
+					"No topics were provided for RetryTopicConfiguration for method %s in class %s.".formatted(
 							endpoint.getMethod().getName(), endpoint.getBean().getClass().getSimpleName()));
 		}
 		return topics;

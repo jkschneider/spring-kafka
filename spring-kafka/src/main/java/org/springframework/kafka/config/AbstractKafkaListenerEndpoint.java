@@ -121,9 +121,9 @@ public abstract class AbstractKafkaListenerEndpoint<K, V>
 	@Override
 	public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
 		this.beanFactory = beanFactory;
-		if (beanFactory instanceof ConfigurableListableBeanFactory) {
-			this.resolver = ((ConfigurableListableBeanFactory) beanFactory).getBeanExpressionResolver();
-			this.expressionContext = new BeanExpressionContext((ConfigurableListableBeanFactory) beanFactory, null);
+		if (beanFactory instanceof ConfigurableListableBeanFactory factory) {
+			this.resolver = factory.getBeanExpressionResolver();
+			this.expressionContext = new BeanExpressionContext(factory, null);
 		}
 		this.beanResolver = new BeanFactoryResolver(beanFactory);
 	}
@@ -480,8 +480,10 @@ public abstract class AbstractKafkaListenerEndpoint<K, V>
 					+ this);
 		}
 		if (this.topicPattern == null && topicsEmpty && topicPartitionsEmpty) {
-			throw new IllegalStateException("At least one of topics, topicPartitions or topicPattern must be provided "
-					+ "for " + this);
+			throw new IllegalStateException("""
+					At least one of topics, topicPartitions or topicPattern must be provided \
+					for \
+					""" + this);
 		}
 	}
 

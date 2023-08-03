@@ -70,8 +70,10 @@ public class BackOffValuesGenerator {
 	private void checkBackOffPolicyTipe(BackOffPolicy providedBackOffPolicy) {
 		if (!(SleepingBackOffPolicy.class.isAssignableFrom(providedBackOffPolicy.getClass())
 				|| NoBackOffPolicy.class.isAssignableFrom(providedBackOffPolicy.getClass()))) {
-			throw new IllegalArgumentException("Either a SleepingBackOffPolicy or a NoBackOffPolicy must be provided. " +
-					"Provided BackOffPolicy: " + providedBackOffPolicy.getClass().getSimpleName());
+			throw new IllegalArgumentException("""
+					Either a SleepingBackOffPolicy or a NoBackOffPolicy must be provided. \
+					Provided BackOffPolicy: \
+					""" + providedBackOffPolicy.getClass().getSimpleName());
 		}
 	}
 
@@ -80,9 +82,9 @@ public class BackOffValuesGenerator {
 		SleepingBackOffPolicy<?> retainingBackOffPolicy = ((SleepingBackOffPolicy<?>) providedBackOffPolicy).withSleeper(sleeper);
 
 		// UniformRandomBackOffPolicy loses the max value when a sleeper is set.
-		if (providedBackOffPolicy instanceof UniformRandomBackOffPolicy) {
+		if (providedBackOffPolicy instanceof UniformRandomBackOffPolicy policy) {
 			((UniformRandomBackOffPolicy) retainingBackOffPolicy)
-					.setMaxBackOffPeriod(((UniformRandomBackOffPolicy) providedBackOffPolicy).getMaxBackOffPeriod());
+					.setMaxBackOffPeriod(policy.getMaxBackOffPeriod());
 		}
 		BackOffContext backOffContext = retainingBackOffPolicy.start(RetrySynchronizationManager.getContext());
 		IntStream.range(0, maxAttempts)

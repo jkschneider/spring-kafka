@@ -195,9 +195,11 @@ public class DefaultErrorHandler extends FailedBatchProcessor implements CommonE
 			MessageListenerContainer container, boolean batchListener) {
 
 		if (thrownException instanceof SerializationException) {
-			throw new IllegalStateException("This error handler cannot process 'SerializationException's directly; "
-					+ "please consider configuring an 'ErrorHandlingDeserializer' in the value and/or key "
-					+ "deserializer", thrownException);
+			throw new IllegalStateException("""
+					This error handler cannot process 'SerializationException's directly; \
+					please consider configuring an 'ErrorHandlingDeserializer' in the value and/or key \
+					deserializer\
+					""", thrownException);
 		}
 		else {
 			throw new IllegalStateException("This error handler cannot process '"

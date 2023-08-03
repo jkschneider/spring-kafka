@@ -298,8 +298,10 @@ public class KafkaTemplate<K, V> implements KafkaOperations<K, V>, ApplicationCo
 	 * @since 2.7.1
 	 */
 	public void setMessagingConverter(SmartMessageConverter messageConverter) {
-		Assert.isTrue(!this.converterSet, "Cannot set the SmartMessageConverter when setting the messageConverter, "
-				+ "add the SmartConverter to the message converter instead");
+		Assert.isTrue(!this.converterSet, """
+				Cannot set the SmartMessageConverter when setting the messageConverter, \
+				add the SmartConverter to the message converter instead\
+				""");
 		((MessagingMessageConverter) this.messageConverter).setMessagingConverter(messageConverter);
 	}
 
@@ -890,11 +892,13 @@ public class KafkaTemplate<K, V> implements KafkaOperations<K, V>, ApplicationCo
 		if (transactionalProducer) {
 			boolean inTransaction = inTransaction();
 			Assert.state(this.allowNonTransactional || inTransaction,
-					"No transaction is in process; "
-						+ "possible solutions: run the template operation within the scope of a "
-						+ "template.executeInTransaction() operation, start a transaction with @Transactional "
-						+ "before invoking the template method, "
-						+ "run in a transaction started by a listener container when consuming a record");
+					"""
+					No transaction is in process; \
+					possible solutions: run the template operation within the scope of a \
+					template.executeInTransaction() operation, start a transaction with @Transactional \
+					before invoking the template method, \
+					run in a transaction started by a listener container when consuming a record\
+					""");
 			if (!inTransaction) {
 				transactionalProducer = false;
 			}

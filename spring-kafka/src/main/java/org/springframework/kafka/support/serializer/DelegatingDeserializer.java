@@ -81,15 +81,15 @@ public class DelegatingDeserializer implements Deserializer<Object> {
 		}
 		if (value instanceof Map) {
 			((Map<String, Object>) value).forEach((selector, deser) -> {
-				if (deser instanceof Deserializer) {
-					this.delegates.put(selector, (Deserializer<?>) deser);
-					((Deserializer<?>) deser).configure(configs, isKey);
+				if (deser instanceof Deserializer deserializer) {
+					this.delegates.put(selector, deserializer);
+					deserializer.configure(configs, isKey);
 				}
-				else if (deser instanceof Class) {
-					instantiateAndConfigure(configs, isKey, this.delegates, selector, (Class<?>) deser);
+				else if (deser instanceof Class class1) {
+					instantiateAndConfigure(configs, isKey, this.delegates, selector, class1);
 				}
-				else if (deser instanceof String) {
-					createInstanceAndConfigure(configs, isKey, this.delegates, selector, (String) deser);
+				else if (deser instanceof String string) {
+					createInstanceAndConfigure(configs, isKey, this.delegates, selector, string);
 				}
 				else {
 					throw new IllegalStateException(configKey
@@ -97,8 +97,8 @@ public class DelegatingDeserializer implements Deserializer<Object> {
 				}
 			});
 		}
-		else if (value instanceof String) {
-			this.delegates.putAll(createDelegates((String) value, configs, isKey));
+		else if (value instanceof String string) {
+			this.delegates.putAll(createDelegates(string, configs, isKey));
 		}
 		else {
 			throw new IllegalStateException(configKey + " must be a map or String, not " + value.getClass());

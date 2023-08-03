@@ -76,8 +76,10 @@ public class ContainerPartitionPausingBackOffManager implements KafkaConsumerBac
 		MessageListenerContainer container = getListenerContainerFromContext(context);
 		container.pausePartition(topicPartition);
 		this.backOffHandler.onNextBackOff(container, topicPartition, backOffTime);
-		throw new KafkaBackoffException(String.format("Partition %s from topic %s is not ready for consumption, " +
-				"backing off for approx. %s millis.", topicPartition.partition(),
+		throw new KafkaBackoffException(("""
+				Partition %s from topic %s is not ready for consumption, \
+				backing off for approx. %s millis.\
+				""").formatted(topicPartition.partition(),
 				topicPartition.topic(), backOffTime),
 				topicPartition, context.getListenerId(), context.getDueTimestamp());
 	}

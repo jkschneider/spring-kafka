@@ -61,8 +61,8 @@ public class HeaderEnricher<K, V> implements Transformer<K, V, KeyValue<K, V>> {
 		Container<K, V> container = new Container<>(this.processorContext, key, value);
 		this.headerExpressions.forEach((name, expression) -> {
 			Object headerValue = expression.getValue(container);
-			if (headerValue instanceof String) {
-				headerValue = ((String) headerValue).getBytes(StandardCharsets.UTF_8);
+			if (headerValue instanceof String string) {
+				headerValue = string.getBytes(StandardCharsets.UTF_8);
 			}
 			else if (!(headerValue instanceof byte[])) {
 				throw new IllegalStateException("Invalid header value type: " + headerValue.getClass());

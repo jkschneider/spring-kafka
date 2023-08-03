@@ -47,8 +47,8 @@ public class KafkaNullAwarePayloadArgumentResolver extends PayloadMethodArgument
 		/*
 		 * Replace KafkaNull list elements with null.
 		 */
-		if (resolved instanceof List) {
-			List<?> list = ((List<?>) resolved);
+		if (resolved instanceof List list1) {
+			List<?> list =list1;
 			for (int i = 0; i < list.size(); i++) {
 				if (list.get(i) instanceof KafkaNull) {
 					list.set(i, null);

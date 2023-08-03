@@ -87,20 +87,20 @@ public class MappingJacksonParameterizedConverter extends MappingJackson2Message
 	protected Object convertFromInternal(Message<?> message, Class<?> targetClass, @Nullable Object conversionHint) {
 		JavaType javaType = determineJavaType(message, conversionHint);
 		Object value = message.getPayload();
-		if (value instanceof Bytes) {
-			value = ((Bytes) value).get();
+		if (value instanceof Bytes bytes) {
+			value = bytes.get();
 		}
-		if (value instanceof String) {
+		if (value instanceof String string) {
 			try {
-				return getObjectMapper().readValue((String) value, javaType);
+				return getObjectMapper().readValue(string, javaType);
 			}
 			catch (IOException e) {
 				throw new ConversionException("Failed to convert from JSON", message, e);
 			}
 		}
-		else if (value instanceof byte[]) {
+		else if (value instanceof byte[] bytes) {
 			try {
-				return getObjectMapper().readValue((byte[]) value, javaType);
+				return getObjectMapper().readValue(bytes, javaType);
 			}
 			catch (IOException e) {
 				throw new ConversionException("Failed to convert from JSON", message, e);
@@ -114,8 +114,8 @@ public class MappingJacksonParameterizedConverter extends MappingJackson2Message
 	private JavaType determineJavaType(Message<?> message, @Nullable Object hint) {
 		JavaType javaType = null;
 		Type type = null;
-		if (hint instanceof Type) {
-			type = (Type) hint;
+		if (hint instanceof Type type1) {
+			type = type1;
 			Headers nativeHeaders = message.getHeaders().get(KafkaHeaders.NATIVE_HEADERS, Headers.class);
 			if (nativeHeaders != null) {
 				javaType = this.typeMapper.getTypePrecedence().equals(TypePrecedence.INFERRED)

@@ -95,8 +95,8 @@ public class SimpleKafkaHeaderMapper extends AbstractKafkaHeaderMapper {
 		headers.forEach((key, value) -> {
 			if (!NEVER.contains(key)) {
 				Object valueToAdd = headerValueToAddOut(key, value);
-				if (valueToAdd instanceof byte[] && matches(key, valueToAdd)) {
-					target.add(new RecordHeader(key, (byte[]) valueToAdd));
+				if (valueToAdd instanceof byte[] bytes && matches(key, valueToAdd)) {
+					target.add(new RecordHeader(key, bytes));
 				}
 			}
 		});

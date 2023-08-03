@@ -218,8 +218,10 @@ public class TopicPartitionOffset {
 
 	@Override
 	public String toString() {
-		return "TopicPartitionOffset{" +
-				"topicPartition=" + this.topicPartition +
+		return """
+				TopicPartitionOffset{\
+				topicPartition=\
+				""" + this.topicPartition +
 				", offset=" + this.offset +
 				", relativeToCurrent=" + this.relativeToCurrent +
 				(this.position == null ? "" : (", position=" + this.position.name())) +

@@ -107,8 +107,10 @@ public final class JUnitUtils {
 
 		ctx.updateLoggers();
 
-		LOGGER.info("++++++++++++++++++++++++++++ "
-				+ "Overridden log level setting for: "
+		LOGGER.info("""
+				++++++++++++++++++++++++++++ \
+				Overridden log level setting for: \
+				"""
 				+ classes.stream()
 				.map(Class::getSimpleName)
 				.collect(Collectors.toList())
@@ -118,8 +120,10 @@ public final class JUnitUtils {
 	}
 
 	public static void revertLevels(String methodName, LevelsContainer container) {
-		LOGGER.info("++++++++++++++++++++++++++++ "
-				+ "Restoring log level setting for test " + methodName);
+		LOGGER.info("""
+				++++++++++++++++++++++++++++ \
+				Restoring log level setting for test \
+				""" + methodName);
 		container.oldCatLevels.forEach((key, value) -> {
 			((Logger) LogManager.getLogger(key)).setLevel(value);
 		});

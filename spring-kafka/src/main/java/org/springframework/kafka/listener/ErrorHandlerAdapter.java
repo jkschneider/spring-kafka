@@ -166,8 +166,8 @@ class ErrorHandlerAdapter implements CommonErrorHandler {
 	public void onPartitionsAssigned(Consumer<?, ?> consumer, Collection<TopicPartition> partitions,
 			Runnable publishPause) {
 
-		if (this.batchErrorHandler instanceof FallbackBatchErrorHandler) {
-			((FallbackBatchErrorHandler) this.batchErrorHandler).onPartitionsAssigned(consumer, partitions,
+		if (this.batchErrorHandler instanceof FallbackBatchErrorHandler handler) {
+			handler.onPartitionsAssigned(consumer, partitions,
 					publishPause);
 		}
 	}

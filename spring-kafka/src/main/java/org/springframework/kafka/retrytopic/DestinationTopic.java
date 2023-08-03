@@ -102,8 +102,10 @@ public class DestinationTopic {
 
 	@Override
 	public String toString() {
-		return "DestinationTopic{" +
-				"destinationName='" + this.destinationName + '\'' +
+		return """
+				DestinationTopic{\
+				destinationName='\
+				""" + this.destinationName + '\'' +
 				", properties=" + this.properties +
 				'}';
 	}
@@ -278,8 +280,10 @@ public class DestinationTopic {
 
 		@Override
 		public String toString() {
-			return "Properties{" +
-					"delayMs=" + this.delayMs +
+			return """
+					Properties{\
+					delayMs=\
+					""" + this.delayMs +
 					", suffix='" + this.suffix + '\'' +
 					", type=" + this.type +
 					", maxAttempts=" + this.maxAttempts +

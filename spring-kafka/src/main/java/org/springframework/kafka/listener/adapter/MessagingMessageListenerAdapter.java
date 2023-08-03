@@ -184,8 +184,10 @@ public abstract class MessagingMessageListenerAdapter<K, V> implements ConsumerS
 	 * @since 2.7.1
 	 */
 	public void setMessagingConverter(SmartMessageConverter messageConverter) {
-		Assert.isTrue(!this.converterSet, "Cannot set the SmartMessageConverter when setting the messageConverter, "
-				+ "add the SmartConverter to the message converter instead");
+		Assert.isTrue(!this.converterSet, """
+				Cannot set the SmartMessageConverter when setting the messageConverter, \
+				add the SmartConverter to the message converter instead\
+				""");
 		((MessagingMessageConverter) this.messageConverter).setMessagingConverter(messageConverter);
 	}
 
@@ -383,8 +385,10 @@ public abstract class MessagingMessageListenerAdapter<K, V> implements ConsumerS
 			throw checkAckArg(ack, message, ex);
 		}
 		catch (MessagingException ex) {
-			throw new ListenerExecutionFailedException(createMessagingErrorMessage("Listener method could not " +
-					"be invoked with the incoming message", message.getPayload()), ex);
+			throw new ListenerExecutionFailedException(createMessagingErrorMessage("""
+					Listener method could not \
+					be invoked with the incoming message\
+					""", message.getPayload()), ex);
 		}
 		catch (Exception ex) {
 			throw new ListenerExecutionFailedException("Listener method '" +
@@ -395,12 +399,16 @@ public abstract class MessagingMessageListenerAdapter<K, V> implements ConsumerS
 	private RuntimeException checkAckArg(@Nullable Acknowledgment acknowledgment, Message<?> message, Exception ex) {
 		if (this.hasAckParameter && acknowledgment == null) {
 			return new ListenerExecutionFailedException("invokeHandler Failed",
-					new IllegalStateException("No Acknowledgment available as an argument, "
-							+ "the listener container must have a MANUAL AckMode to populate the Acknowledgment.",
+					new IllegalStateException("""
+							No Acknowledgment available as an argument, \
+							the listener container must have a MANUAL AckMode to populate the Acknowledgment.\
+							""",
 							ex));
 		}
-		return new ListenerExecutionFailedException(createMessagingErrorMessage("Listener method could not " +
-				"be invoked with the incoming message", message.getPayload()), ex);
+		return new ListenerExecutionFailedException(createMessagingErrorMessage("""
+				Listener method could not \
+				be invoked with the incoming message\
+				""", message.getPayload()), ex);
 	}
 
 	/**
@@ -475,16 +483,16 @@ public abstract class MessagingMessageListenerAdapter<K, V> implements ConsumerS
 			this.replyTemplate.send(reply);
 		}
 		else {
-			if (result instanceof Iterable) {
-				Iterator<?> iterator = ((Iterable<?>) result).iterator();
+			if (result instanceof Iterable iterable) {
+				Iterator<?> iterator = iterable.iterator();
 				boolean iterableOfMessages = false;
 				if (iterator.hasNext()) {
 					iterableOfMessages = iterator.next() instanceof Message;
 				}
 				if (iterableOfMessages || this.splitIterables) {
 					((Iterable<V>) result).forEach(v -> {
-						if (v instanceof Message) {
-							this.replyTemplate.send((Message<?>) v);
+						if (v instanceof Message message) {
+							this.replyTemplate.send(message);
 						}
 						else {
 							this.replyTemplate.send(topic, v);
@@ -668,15 +676,17 @@ public abstract class MessagingMessageListenerAdapter<K, V> implements ConsumerS
 		boolean validParametersForBatch = method.getGenericParameterTypes().length <= allowedBatchParameters;
 
 		if (!validParametersForBatch) {
-			String stateMessage = "A parameter of type '%s' must be the only parameter "
-					+ "(except for an optional 'Acknowledgment' and/or 'Consumer' "
-					+ "and/or '@Header(KafkaHeaders.GROUP_ID) String groupId'";
+			String stateMessage = """
+					A parameter of type '%s' must be the only parameter \
+					(except for an optional 'Acknowledgment' and/or 'Consumer' \
+					and/or '@Header(KafkaHeaders.GROUP_ID) String groupId'\
+					""";
 			Assert.state(!this.isConsumerRecords,
-					() -> String.format(stateMessage, "ConsumerRecords"));
+					() -> stateMessage.formatted("ConsumerRecords"));
 			Assert.state(!this.isConsumerRecordList,
-					() -> String.format(stateMessage, "List<ConsumerRecord>"));
+					() -> stateMessage.formatted("List<ConsumerRecord>"));
 			Assert.state(!this.isMessageList,
-					() -> String.format(stateMessage, "List<Message<?>>"));
+					() -> stateMessage.formatted("List<Message<?>>"));
 		}
 		this.messageReturnType = KafkaUtils.returnTypeMessageOrCollectionOf(method);
 		return genericParameterType;

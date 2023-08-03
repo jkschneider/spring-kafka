@@ -100,8 +100,10 @@ public final class MicrometerHolder {
 			buildTimer(NONE_EXCEPTION_METERS_KEY, null);
 		}
 		else {
-			throw new IllegalStateException("No micrometer registry present (or more than one and "
-					+ "there is not exactly one marked with @Primary)");
+			throw new IllegalStateException("""
+					No micrometer registry present (or more than one and \
+					there is not exactly one marked with @Primary)\
+					""");
 		}
 	}
 

@@ -281,10 +281,12 @@ public class ReactiveKafkaProducerTemplateTransactionIntegrationTests {
 						.abort()
 						.then(Mono.error(error))))
 				.expectErrorMatches(throwable -> throwable instanceof IllegalStateException &&
-						throwable.getMessage().equals("TransactionalId reactive.transaction."
-								+ "shouldSendOneRecordTransactionallyViaTemplateAsSenderRecord"
-								+ "AndReceiveItExactlyOnceWithException: Invalid transition " +
-								"attempted from state READY to state ABORTING_TRANSACTION"))
+						throwable.getMessage().equals("""
+								TransactionalId reactive.transaction.\
+								shouldSendOneRecordTransactionallyViaTemplateAsSenderRecord\
+								AndReceiveItExactlyOnceWithException: Invalid transition \
+								attempted from state READY to state ABORTING_TRANSACTION\
+								"""))
 				.verify(DEFAULT_VERIFY_TIMEOUT);
 
 		StepVerifier.create(reactiveKafkaConsumerTemplate

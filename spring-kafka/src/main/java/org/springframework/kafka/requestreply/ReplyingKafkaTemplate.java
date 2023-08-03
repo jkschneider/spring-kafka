@@ -153,8 +153,10 @@ public class ReplyingKafkaTemplate<K, V, R> extends KafkaTemplate<K, V> implemen
 		if (tempReplyTopic == null) {
 			this.replyTopic = null;
 			this.replyPartition = null;
-			this.logger.debug(() -> "Could not determine container's reply topic/partition; senders must populate "
-					+ "at least the " + KafkaHeaders.REPLY_TOPIC + " header, and optionally the "
+			this.logger.debug(() -> """
+					Could not determine container's reply topic/partition; senders must populate \
+					at least the \
+					""" + KafkaHeaders.REPLY_TOPIC + " header, and optionally the "
 					+ KafkaHeaders.REPLY_PARTITION + " header");
 		}
 		else {

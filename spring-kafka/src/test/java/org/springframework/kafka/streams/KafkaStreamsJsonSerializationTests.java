@@ -144,8 +144,10 @@ public class KafkaStreamsJsonSerializationTests {
 
 		@Override
 		public String toString() {
-			return "JsonObjectKey{" +
-					"key=" + key +
+			return """
+					JsonObjectKey{\
+					key=\
+					""" + key +
 					'}';
 		}
 
@@ -170,8 +172,10 @@ public class KafkaStreamsJsonSerializationTests {
 
 		@Override
 		public String toString() {
-			return "JsonObjectValue{" +
-					"value='" + value + '\'' +
+			return """
+					JsonObjectValue{\
+					value='\
+					""" + value + '\'' +
 					'}';
 		}
 

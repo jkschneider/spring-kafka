@@ -229,7 +229,7 @@ class DefaultDestinationTopicResolverTests extends DestinationTopicTests {
 
 		assertThatIllegalArgumentException().isThrownBy(
 				() -> destinationResolver.addDestinationTopics("id", destinationTopics))
-			.withMessageMatching(String.format(".*%s.*last retry topic.*", Type.REUSABLE_RETRY_TOPIC));
+			.withMessageMatching(".*%s.*last retry topic.*".formatted(Type.REUSABLE_RETRY_TOPIC));
 	}
 
 	@Test

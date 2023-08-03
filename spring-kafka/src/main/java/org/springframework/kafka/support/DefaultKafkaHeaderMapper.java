@@ -272,8 +272,8 @@ public class DefaultKafkaHeaderMapper extends AbstractKafkaHeaderMapper {
 		headers.forEach((key, rawValue) -> {
 			if (matches(key, rawValue)) {
 				Object valueToAdd = headerValueToAddOut(key, rawValue);
-				if (valueToAdd instanceof byte[]) {
-					target.add(new RecordHeader(key, (byte[]) valueToAdd));
+				if (valueToAdd instanceof byte[] bytes) {
+					target.add(new RecordHeader(key, bytes));
 				}
 				else {
 					try {
@@ -284,8 +284,8 @@ public class DefaultKafkaHeaderMapper extends AbstractKafkaHeaderMapper {
 							className = JAVA_LANG_STRING;
 							encodeToJson = true;
 						}
-						if (!encodeToJson && valueToAdd instanceof String) {
-							target.add(new RecordHeader(key, ((String) valueToAdd).getBytes(getCharset())));
+						if (!encodeToJson && valueToAdd instanceof String string) {
+							target.add(new RecordHeader(key, string.getBytes(getCharset())));
 							className = JAVA_LANG_STRING;
 						}
 						else {

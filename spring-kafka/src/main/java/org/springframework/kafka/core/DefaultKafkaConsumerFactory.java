@@ -439,8 +439,10 @@ public class DefaultKafkaConsumerFactory<K, V> extends KafkaResourceFactory
 			}
 		}
 		if (inaccessible != null) {
-			LOGGER.error("Non-String-valued default properties are inaccessible; use String values or "
-					+ "make them explicit properties instead of defaults: "
+			LOGGER.error("""
+					Non-String-valued default properties are inaccessible; use String values or \
+					make them explicit properties instead of defaults: \
+					"""
 					+ inaccessible);
 		}
 	}
@@ -505,8 +507,8 @@ public class DefaultKafkaConsumerFactory<K, V> extends KafkaResourceFactory
 	@Override
 	public boolean isAutoCommit() {
 		Object auto = this.configs.get(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG);
-		return auto instanceof Boolean ? (Boolean) auto
-				: auto instanceof String ? Boolean.valueOf((String) auto) : true;
+		return auto instanceof Boolean b ? b
+				: auto instanceof String s ? Boolean.valueOf(s) : true;
 	}
 
 }

@@ -93,8 +93,10 @@ public class JsonMessageConverter extends MessagingMessageConverter {
 
 	@Override
 	protected Object convertPayload(Message<?> message) {
-		throw new UnsupportedOperationException("Select a subclass that creates a ProducerRecord value "
-				+ "corresponding to the configured Kafka Serializer");
+		throw new UnsupportedOperationException("""
+				Select a subclass that creates a ProducerRecord value \
+				corresponding to the configured Kafka Serializer\
+				""");
 	}
 
 	@Override
@@ -105,20 +107,20 @@ public class JsonMessageConverter extends MessagingMessageConverter {
 		}
 
 		JavaType javaType = determineJavaType(record, type);
-		if (value instanceof Bytes) {
-			value = ((Bytes) value).get();
+		if (value instanceof Bytes bytes) {
+			value = bytes.get();
 		}
-		if (value instanceof String) {
+		if (value instanceof String string) {
 			try {
-				return this.objectMapper.readValue((String) value, javaType);
+				return this.objectMapper.readValue(string, javaType);
 			}
 			catch (IOException e) {
 				throw new ConversionException("Failed to convert from JSON", record, e);
 			}
 		}
-		else if (value instanceof byte[]) {
+		else if (value instanceof byte[] bytes) {
 			try {
-				return this.objectMapper.readValue((byte[]) value, javaType);
+				return this.objectMapper.readValue(bytes, javaType);
 			}
 			catch (IOException e) {
 				throw new ConversionException("Failed to convert from JSON", record, e);

@@ -164,8 +164,8 @@ public abstract class AbstractKafkaListenerContainerFactory<C extends AbstractMe
 	 */
 	@Deprecated
 	public void setMessageConverter(MessageConverter messageConverter) {
-		if (messageConverter instanceof RecordMessageConverter) {
-			setRecordMessageConverter((RecordMessageConverter) messageConverter);
+		if (messageConverter instanceof RecordMessageConverter converter) {
+			setRecordMessageConverter(converter);
 		}
 		else {
 			setBatchMessageConverter((BatchMessageConverter) messageConverter);
@@ -239,10 +239,12 @@ public abstract class AbstractKafkaListenerContainerFactory<C extends AbstractMe
 	public void setReplyTemplate(KafkaTemplate<?, ?> replyTemplate) {
 		if (replyTemplate instanceof ReplyingKafkaOperations) {
 			this.logger.warn(
-					"The 'replyTemplate' should not be an implementation of 'ReplyingKafkaOperations'; "
-							+ "such implementations are for client-side request/reply operations; here we "
-							+ "are simply sending a reply to an incoming request so the reply container will "
-							+ "never be used and will consume unnecessary resources.");
+					"""
+					The 'replyTemplate' should not be an implementation of 'ReplyingKafkaOperations'; \
+					such implementations are for client-side request/reply operations; here we \
+					are simply sending a reply to an incoming request so the reply container will \
+					never be used and will consume unnecessary resources.\
+					""");
 		}
 		this.replyTemplate = replyTemplate;
 	}

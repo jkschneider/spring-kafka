@@ -82,8 +82,8 @@ public class RetryableTopicAnnotationProcessor {
 	 * @param beanFactory the bean factory.
 	 */
 	public RetryableTopicAnnotationProcessor(BeanFactory beanFactory) {
-		this(beanFactory, new StandardBeanExpressionResolver(), beanFactory instanceof ConfigurableBeanFactory
-				? new BeanExpressionContext((ConfigurableBeanFactory) beanFactory, null)
+		this(beanFactory, new StandardBeanExpressionResolver(), beanFactory instanceof ConfigurableBeanFactory cbf
+				? new BeanExpressionContext(cbf, null)
 				: null); // NOSONAR
 	}
 
@@ -220,8 +220,10 @@ public class RetryableTopicAnnotationProcessor {
 		}
 		catch (NoSuchBeanDefinitionException ex2) {
 			KafkaOperations<?, ?> kafkaOps = this.beanFactory.getBeanProvider(KafkaOperations.class).getIfUnique();
-			Assert.state(kafkaOps != null, () -> "A single KafkaTemplate bean could not be found in the context; "
-					+ " a single instance must exist, or one specifically named "
+			Assert.state(kafkaOps != null, () -> """
+					A single KafkaTemplate bean could not be found in the context; \
+					 a single instance must exist, or one specifically named \
+					"""
 					+ RetryTopicBeanNames.DEFAULT_KAFKA_TEMPLATE_BEAN_NAME);
 			return kafkaOps;
 		}
@@ -229,8 +231,8 @@ public class RetryableTopicAnnotationProcessor {
 
 	private String resolveExpressionAsString(String value, String attribute) {
 		Object resolved = resolveExpression(value);
-		if (resolved instanceof String) {
-			return (String) resolved;
+		if (resolved instanceof String string) {
+			return string;
 		}
 		else if (resolved != null) {
 			throw new IllegalStateException(THE_OSQ + attribute + "] must resolve to a String. "
@@ -242,16 +244,16 @@ public class RetryableTopicAnnotationProcessor {
 	private Integer resolveExpressionAsInteger(String value, String attribute, boolean required) {
 		Object resolved = resolveExpression(value);
 		Integer result = null;
-		if (resolved instanceof String) {
-			if (!required && !StringUtils.hasText((String) resolved)) {
+		if (resolved instanceof String string) {
+			if (!required && !StringUtils.hasText(string)) {
 				result = null;
 			}
 			else {
-				result = Integer.parseInt((String) resolved);
+				result = Integer.parseInt(string);
 			}
 		}
-		else if (resolved instanceof Number) {
-			result = ((Number) resolved).intValue();
+		else if (resolved instanceof Number number) {
+			result = number.intValue();
 		}
 		else if (resolved != null || required) {
 			throw new IllegalStateException(
@@ -265,16 +267,16 @@ public class RetryableTopicAnnotationProcessor {
 	private Short resolveExpressionAsShort(String value, String attribute, boolean required) {
 		Object resolved = resolveExpression(value);
 		Short result = null;
-		if (resolved instanceof String) {
-			if (!required && !StringUtils.hasText((String) resolved)) {
+		if (resolved instanceof String string) {
+			if (!required && !StringUtils.hasText(string)) {
 				result = null;
 			}
 			else {
-				result = Short.parseShort((String) resolved);
+				result = Short.parseShort(string);
 			}
 		}
-		else if (resolved instanceof Number) {
-			result = ((Number) resolved).shortValue();
+		else if (resolved instanceof Number number) {
+			result = number.shortValue();
 		}
 		else if (resolved != null || required) {
 			throw new IllegalStateException(
@@ -288,16 +290,16 @@ public class RetryableTopicAnnotationProcessor {
 	private Long resolveExpressionAsLong(String value, String attribute, boolean required) {
 		Object resolved = resolveExpression(value);
 		Long result = null;
-		if (resolved instanceof String) {
-			if (!required && !StringUtils.hasText((String) resolved)) {
+		if (resolved instanceof String string) {
+			if (!required && !StringUtils.hasText(string)) {
 				result = null;
 			}
 			else {
-				result = Long.parseLong((String) resolved);
+				result = Long.parseLong(string);
 			}
 		}
-		else if (resolved instanceof Number) {
-			result = ((Number) resolved).longValue();
+		else if (resolved instanceof Number number) {
+			result = number.longValue();
 		}
 		else if (resolved != null || required) {
 			throw new IllegalStateException(
@@ -311,16 +313,16 @@ public class RetryableTopicAnnotationProcessor {
 	private Double resolveExpressionAsDouble(String value, String attribute, boolean required) {
 		Object resolved = resolveExpression(value);
 		Double result = null;
-		if (resolved instanceof String) {
-			if (!required && !StringUtils.hasText((String) resolved)) {
+		if (resolved instanceof String string) {
+			if (!required && !StringUtils.hasText(string)) {
 				result = null;
 			}
 			else {
-				result = Double.parseDouble((String) resolved);
+				result = Double.parseDouble(string);
 			}
 		}
-		else if (resolved instanceof Number) {
-			result = ((Number) resolved).doubleValue();
+		else if (resolved instanceof Number number) {
+			result = number.doubleValue();
 		}
 		else if (resolved != null || required) {
 			throw new IllegalStateException(
@@ -334,11 +336,11 @@ public class RetryableTopicAnnotationProcessor {
 	private Boolean resolveExpressionAsBoolean(String value, String attribute) {
 		Object resolved = resolveExpression(value);
 		Boolean result = null;
-		if (resolved instanceof Boolean) {
-			result = (Boolean) resolved;
+		if (resolved instanceof Boolean boolean1) {
+			result = boolean1;
 		}
-		else if (resolved instanceof String) {
-			result = Boolean.parseBoolean((String) resolved);
+		else if (resolved instanceof String string) {
+			result = Boolean.parseBoolean(string);
 		}
 		else if (resolved != null) {
 			throw new IllegalStateException(
@@ -379,8 +381,8 @@ public class RetryableTopicAnnotationProcessor {
 	}
 
 	private String resolve(String value) {
-		if (this.beanFactory != null && this.beanFactory instanceof ConfigurableBeanFactory) {
-			return ((ConfigurableBeanFactory) this.beanFactory).resolveEmbeddedValue(value);
+		if (this.beanFactory != null && this.beanFactory instanceof ConfigurableBeanFactory factory) {
+			return factory.resolveEmbeddedValue(value);
 		}
 		return value;
 	}

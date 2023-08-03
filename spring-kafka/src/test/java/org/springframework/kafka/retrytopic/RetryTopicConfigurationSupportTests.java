@@ -295,7 +295,9 @@ class RetryTopicConfigurationSupportTests {
 		@SuppressWarnings("unchecked")
 		ArgumentCaptor<Supplier<String>> captor = ArgumentCaptor.forClass(Supplier.class);
 		verify(logger).warn(captor.capture());
-		assertThat(captor.getValue().get()).isEqualTo("Only one RetryTopicConfigurationSupport object expected, found "
-				+ "[foo, bar]; this may result in unexpected behavior");
+		assertThat(captor.getValue().get()).isEqualTo("""
+				Only one RetryTopicConfigurationSupport object expected, found \
+				[foo, bar]; this may result in unexpected behavior\
+				""");
 	}
 }

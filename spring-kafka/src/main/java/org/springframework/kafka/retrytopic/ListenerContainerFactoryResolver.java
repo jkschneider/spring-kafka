@@ -127,9 +127,11 @@ public class ListenerContainerFactoryResolver {
 				.filter(Optional::isPresent)
 				.map(Optional::get)
 				.findFirst()
-				.orElseThrow(() -> new IllegalArgumentException("Could not resolve a viable " +
-						"ConcurrentKafkaListenerContainerFactory to configure the retry topic. " +
-						"Try creating a bean with name " +
+				.orElseThrow(() -> new IllegalArgumentException("""
+						Could not resolve a viable \
+						ConcurrentKafkaListenerContainerFactory to configure the retry topic. \
+						Try creating a bean with name \
+						""" +
 						RetryTopicBeanNames.DEFAULT_LISTENER_CONTAINER_FACTORY_BEAN_NAME));
 	}
 

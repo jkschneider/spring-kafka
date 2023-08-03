@@ -156,19 +156,19 @@ public class JsonSerializer<T> implements Serializer<T> {
 		setUseTypeMapperForKey(isKey);
 		if (configs.containsKey(ADD_TYPE_INFO_HEADERS)) {
 			Object config = configs.get(ADD_TYPE_INFO_HEADERS);
-			if (config instanceof Boolean) {
-				this.addTypeInfo = (Boolean) config;
+			if (config instanceof Boolean boolean1) {
+				this.addTypeInfo = boolean1;
 			}
-			else if (config instanceof String) {
-				this.addTypeInfo = Boolean.valueOf((String) config);
+			else if (config instanceof String string) {
+				this.addTypeInfo = Boolean.valueOf(string);
 			}
 			else {
 				throw new IllegalStateException(ADD_TYPE_INFO_HEADERS + " must be Boolean or String");
 			}
 		}
 		if (configs.containsKey(TYPE_MAPPINGS) && !this.typeMapperExplicitlySet
-				&& this.typeMapper instanceof AbstractJavaTypeMapper) {
-			((AbstractJavaTypeMapper) this.typeMapper)
+				&& this.typeMapper instanceof AbstractJavaTypeMapper mapper) {
+			mapper
 					.setIdClassMapping(createMappings((String) configs.get(TYPE_MAPPINGS)));
 		}
 		this.configured = true;

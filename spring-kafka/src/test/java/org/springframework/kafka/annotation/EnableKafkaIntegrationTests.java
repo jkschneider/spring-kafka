@@ -856,8 +856,10 @@ public class EnableKafkaIntegrationTests {
 		assertThat(this.config.badAckLatch.await(30, TimeUnit.SECONDS)).isTrue();
 		assertThat(this.config.badAckException).isInstanceOf(IllegalStateException.class);
 		assertThat(this.config.badAckException.getMessage())
-				.isEqualTo("No Acknowledgment available as an argument, "
-						+ "the listener container must have a MANUAL AckMode to populate the Acknowledgment.");
+				.isEqualTo("""
+						No Acknowledgment available as an argument, \
+						the listener container must have a MANUAL AckMode to populate the Acknowledgment.\
+						""");
 	}
 
 	@Test
@@ -1707,7 +1709,7 @@ public class EnableKafkaIntegrationTests {
 
 				@Override
 				public void validate(Object target, Errors errors) {
-					if (target instanceof ValidatedClass && ((ValidatedClass) target).getBar() > 10) {
+					if (target instanceof ValidatedClass class1 && class1.getBar() > 10) {
 						errors.reject("bar too large");
 					}
 					else {
@@ -1772,7 +1774,7 @@ public class EnableKafkaIntegrationTests {
 				protected Object convertToInternal(Object payload, @Nullable MessageHeaders headers,
 						@Nullable Object conversionHint) {
 
-					return payload instanceof Foo ? ((Foo) payload).getBar() : null;
+					return payload instanceof Foo f ? f.getBar() : null;
 				}
 
 			};
@@ -2304,7 +2306,7 @@ public class EnableKafkaIntegrationTests {
 				proxyFactory.addAdvice(new MethodInterceptor() {
 					@Override
 					public Object invoke(MethodInvocation invocation) throws Throwable {
-						logger.info(String.format("Proxy listener for %s.$s",
+						logger.info("Proxy listener for %s.$s".formatted(
 								invocation.getMethod().getDeclaringClass(), invocation.getMethod().getName()));
 						return invocation.proceed();
 					}

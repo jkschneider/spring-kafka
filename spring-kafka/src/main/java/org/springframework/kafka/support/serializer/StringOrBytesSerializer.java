@@ -41,14 +41,14 @@ public class StringOrBytesSerializer implements Serializer<Object> {
 
 	@Override
 	public byte[] serialize(String topic, Object data) {
-		if (data instanceof byte[]) {
-			return (byte[]) data;
+		if (data instanceof byte[] bytes) {
+			return bytes;
 		}
-		else if (data instanceof Bytes) {
-			return ((Bytes) data).get();
+		else if (data instanceof Bytes bytes) {
+			return bytes.get();
 		}
-		else if (data instanceof String) {
-			return this.stringSerializer.serialize(topic, (String) data);
+		else if (data instanceof String string) {
+			return this.stringSerializer.serialize(topic, string);
 		}
 		else if (data == null) {
 			return null;

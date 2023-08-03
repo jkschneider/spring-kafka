@@ -326,8 +326,8 @@ public class JsonDeserializer<T> implements Deserializer<T> {
 		Assert.notNull(typeMapper, "'typeMapper' cannot be null");
 		this.typeMapper = typeMapper;
 		this.typeMapperExplicitlySet = true;
-		if (typeMapper instanceof AbstractJavaTypeMapper) {
-			addMappingsToTrusted(((AbstractJavaTypeMapper) typeMapper).getIdClassMapping());
+		if (typeMapper instanceof AbstractJavaTypeMapper mapper) {
+			addMappingsToTrusted(mapper.getIdClassMapping());
 		}
 		this.setterCalled = true;
 	}
@@ -414,8 +414,8 @@ public class JsonDeserializer<T> implements Deserializer<T> {
 					StringUtils.delimitedListToStringArray((String) configs.get(TRUSTED_PACKAGES), ",", " \r\n\f\t"));
 		}
 		if (configs.containsKey(TYPE_MAPPINGS) && !this.typeMapperExplicitlySet
-				&& this.typeMapper instanceof AbstractJavaTypeMapper) {
-			((AbstractJavaTypeMapper) this.typeMapper).setIdClassMapping(createMappings(configs));
+				&& this.typeMapper instanceof AbstractJavaTypeMapper mapper) {
+			mapper.setIdClassMapping(createMappings(configs));
 		}
 		if (configs.containsKey(REMOVE_TYPE_INFO_HEADERS)) {
 			this.removeTypeHeaders = Boolean.parseBoolean(configs.get(REMOVE_TYPE_INFO_HEADERS).toString());

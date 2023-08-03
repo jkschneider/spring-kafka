@@ -209,8 +209,10 @@ public class DefaultDestinationTopicResolver extends ExceptionClassifier
 			if (destination.isReusableRetryTopic()) {
 				Assert.isTrue((i == (destinationsToAdd.size() - 1) ||
 						((i == (destinationsToAdd.size() - 2)) && (destinationsToAdd.get(i + 1).isDltTopic()))),
-						String.format("In the destination topic chain, the type %s can only be "
-								+ "specified as the last retry topic.", Type.REUSABLE_RETRY_TOPIC));
+						("""
+								In the destination topic chain, the type %s can only be \
+								specified as the last retry topic.\
+								""").formatted(Type.REUSABLE_RETRY_TOPIC));
 			}
 		}
 	}
